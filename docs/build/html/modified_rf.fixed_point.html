@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>modified_rf.fixed_point package &#8212; project-rf-comparison 0.5 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=dfa0e015" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+    <script src="_static/documentation_options.js?v=db78e746"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="modified_rf.memory_handling package" href="modified_rf.memory_handling.html" />
+    <link rel="prev" title="modified_rf.calculus package" href="modified_rf.calculus.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>project-rf-comparison 0.5 documentation</span></a></h1>
+        <h2 class="heading"><span>modified_rf.fixed_point package</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="modified_rf.calculus.html">modified_rf.calculus package</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="modified_rf.memory_handling.html">modified_rf.memory_handling package</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="modified-rf-fixed-point-package">
+<h1>modified_rf.fixed_point package<a class="headerlink" href="#modified-rf-fixed-point-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-modified_rf.fixed_point.fixed_point">
+<span id="modified-rf-fixed-point-fixed-point-module"></span><h2>modified_rf.fixed_point.fixed_point module<a class="headerlink" href="#module-modified_rf.fixed_point.fixed_point" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.fixed_point.FixedPointLayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FixedPointLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_initialization_theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_initialization_y0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batched_fixed_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hook_ift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed_point_iter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">51</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_tau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surrogate_f_solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surrogate_f_max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">51</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surrogate_f_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surrogate_f_tau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed_point_iter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abs_error_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a></p>
+<p>This layer implements the fixed point operation corresponding to
+<div class="math notranslate nohighlight">
+\[\mathbf{y}^* = f_{\theta}(\mathbf{x}, \mathbf{y}^*)\]</div>
+
+providing the output <span class="math notranslate nohighlight">\(\mathbf{y}^*\)</span> for a given input <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>,
+wherein <span class="math notranslate nohighlight">\(\theta\)</span> corresponds to the parameter(s) ruling the behavior of <span class="math notranslate nohighlight">\(f(·; \theta)\)</span>.
+The function f will have to be defined in a manner that:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>takes the arguments <span class="math notranslate nohighlight">\(\theta\)</span> in the appropriate manner,</p></li>
+<li><p>outputs the same dimensionality as <span class="math notranslate nohighlight">\(\mathbf{y}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<p>The number of input dimensions will not be explicitly specified, since it will be provided, but must be consistent
+with the requirements of the function <span class="math notranslate nohighlight">\(f_{\theta}(·, ·)\)</span>.</p>
+<p>Fixed point operations and their corresponding backward calculations are performed, or can be performed, using the     library <a class="reference external" href="https://torchdeq.readthedocs.io/en/latest/get_started.html#quick-start">TorchDEQ</a>, which supports the     following solvers: <code class="docutils literal notranslate"><span class="pre">'anderson'</span></code>, <code class="docutils literal notranslate"><span class="pre">'broyden'</span></code>, <code class="docutils literal notranslate"><span class="pre">'fixed_point_iter'</span></code> (default), and     <code class="docutils literal notranslate"><span class="pre">'simple_fixed_point_iter'</span></code> for both the forward and backward fixed point calculations of the implicit derivation.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>WARNING (1): <code class="docutils literal notranslate"><span class="pre">'fixed_point_iter'</span></code> does, exactly, what its name suggests; that means that
+it is not accelerated and that it only reaches fixed points which are <strong>attracting fixed points</strong>
+and from initial points <span class="math notranslate nohighlight">\(\mathbf{y}_0\)</span> which are in the basin of attraction of the point
+(see <a class="reference external" href="https://en.wikipedia.org/wiki/Fixed-point_iteration#Attracting_fixed_points">Wiki</a>).
+However, <code class="docutils literal notranslate"><span class="pre">anderson</span></code> and <code class="docutils literal notranslate"><span class="pre">broyden</span></code> methods appear to find the root
+of <span class="math notranslate nohighlight">\(\mathbf{g}(\mathbf{y})=\mathbf{f}(y)-\mathbf{y}\)</span>
+and seem to work well in more general settings. This impression, however, must be taken only as an indication
+and not as a rule.</p></li>
+</ul>
+</div></blockquote>
+<p>Certain of the solvers, namely <code class="docutils literal notranslate"><span class="pre">'fixed_point_iter'</span></code>, <code class="docutils literal notranslate"><span class="pre">'simple_fixed_point_iter'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'anderson'</span></code>,     allow for a parameter <code class="docutils literal notranslate"><span class="pre">tau</span></code> (<span class="math notranslate nohighlight">\(\tau\)</span>), which servers as a dampening factor for the calculation. For the case of     <code class="docutils literal notranslate"><span class="pre">'fixed_point_iter'</span></code> and <code class="docutils literal notranslate"><span class="pre">'simple_fixed_point_iter'</span></code> it implies the following damped iteration:</p>
+<blockquote>
+<div><p><div class="math notranslate nohighlight">
+\[\mathbf{y}^{(n)} = (1-\tau) \, \mathbf{y}^{(n-1)} +
+\tau \, f_{\theta}(\mathbf{x}, \mathbf{y}^{(n-1)}) \; .\]</div>
+</p>
+</div></blockquote>
+<p>Regarding the allowed solvers: this class <a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer" title="modified_rf.fixed_point.fixed_point.FixedPointLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">FixedPointLayer</span></code></a>     is both a class on its own and a parent/interface class.     As a parent/interface class, it allows for forward fixed point methods different from the solvers included by     the library TorchDEQ (that is, from <code class="docutils literal notranslate"><span class="pre">'anderson'</span></code>, <code class="docutils literal notranslate"><span class="pre">'broyden'</span></code>, <code class="docutils literal notranslate"><span class="pre">'fixed_point_iter'</span></code> (default), and     <code class="docutils literal notranslate"><span class="pre">'simple_fixed_point_iter'</span></code>): however, in those cases, which are managed by the <cite>forward()</cite> method of the child     class and are managed by generated the fixed point solution by that other method and input to the     <a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.forward" title="modified_rf.fixed_point.fixed_point.FixedPointLayer.forward"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FixedPointLayer.forward()</span></code></a> method as the initial solution, this class <a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer" title="modified_rf.fixed_point.fixed_point.FixedPointLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">FixedPointLayer</span></code></a>     still needs one of the “canonical” solvers as a “surrogate” solver, which is only symbolically used.     The backward fixed point calculation is always performed by one of the canonical solvers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><em>Callable</em></a>) – <p>Function <cite>f(y, x; theta)</cite> (notice that this is the presumed order for its variables), wherein</p>
+<blockquote>
+<div><ul>
+<li><p><cite>f</cite> returns a tensor of the same dimensionality of the tensor <cite>y</cite></p></li>
+<li><p><cite>x</cite> is a tensor</p></li>
+<li><p><cite>theta</cite> represents the parameters ruling the shape of the function <cite>f</cite></p></li>
+<li><p>and the fixed point problem is defined as <cite>y* = f(y*,x; theta)</cite>.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>theta0</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a><em>]</em>) – <p>Function parameters theta for <cite>f(y,x; theta)</cite>.
+The only requirement that the defined function <cite>f</cite> accepts the used formatting, said <cite>theta0</cite> can be any of</p>
+<blockquote>
+<div><ul>
+<li><p>a tensor</p></li>
+<li><p>a dictionary of named tensors</p></li>
+<li><p>a list of tensors</p></li>
+</ul>
+</div></blockquote>
+<p>If the argument <code class="docutils literal notranslate"><span class="pre">theta_randomly_initialised</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> its initial content is randomized (see below).
+(<em>Note</em>: <cite>theta</cite> can be a tensor, or a list or a dict of tensors: it is important that they are tensors
+because they need to be registered as <code class="docutils literal notranslate"><span class="pre">torch.nn.Parameter()</span></code> of the module so they can be automatically
+addressed in the optimization process of the training, and only individual tensors can be registered.
+Different procedure will be followed for each case (tensor, list of tensors, dict of tensors).</p>
+</p></li>
+<li><p><strong>random_initialization_theta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the exact values of the provided structure <code class="docutils literal notranslate"><span class="pre">theta0</span></code> are unimportant: <cite>theta</cite> is composed by
+initialising randomly the exact values of its composing tensors from a uniform distribution [0,1).
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>y0</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a><em>, </em><em>optional</em>) – Initial value for y for the fixed point algorithm aiming at finding <cite>y* = f(y*,x; theta)</cite>.
+Not required. Used to have a fixed initial point for all the fixed
+point iterations. The <a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.forward" title="modified_rf.fixed_point.fixed_point.FixedPointLayer.forward"><code class="xref py py-meth docutils literal notranslate"><span class="pre">forward()</span></code></a> method would in any case allow input of other initial points
+at evaluation.</p></li>
+<li><p><strong>random_initialization_y0</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the exact values of the provided structure <code class="docutils literal notranslate"><span class="pre">theta0</span></code> are unimportant: <cite>theta</cite> is composed by
+initialising randomly the exact values of its composing tensors from a uniform distribution [0,1).
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>batched_fixed_point</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – It indicates whether the calculation in <a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.forward" title="modified_rf.fixed_point.fixed_point.FixedPointLayer.forward"><code class="xref py py-meth docutils literal notranslate"><span class="pre">forward()</span></code></a> of the fixed point  for an input batch
+of <span class="math notranslate nohighlight">\(B\)</span> elements (that is, for a 4D input) should operate on each one of its <span class="math notranslate nohighlight">\(B\)</span> individual 3D entries
+(if <code class="docutils literal notranslate"><span class="pre">False</span></code>) or, on the contrary (if <code class="docutils literal notranslate"><span class="pre">True</span></code>), on the 4D input as one single item.
+Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>ift</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>)</p></li>
+<li><p><strong>hook_ift</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>)</p></li>
+<li><p><strong>f_solver</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Value among <code class="docutils literal notranslate"><span class="pre">'fixed_point_iter'</span></code>, <code class="docutils literal notranslate"><span class="pre">'simple_fixed_point_iter'</span></code>, <code class="docutils literal notranslate"><span class="pre">'anderson'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'broyden'</span></code>,         or other value if the forward point calculation is managed by an external forward solver:         in the latter case one of the canonical solvers must be used as a surrogate solver.
+It indicates the type of fixed point problem algorithm for the forward fixed point calculation,         whose underlying solver functions for the canonical solvers are, respectively,         <a class="reference external" href="https://torchdeq.readthedocs.io/en/latest/torchdeq/solver.html#torchdeq.solver.fp_iter.fixed_point_iter" title="(in TorchDEQ)"><code class="xref py py-func docutils literal notranslate"><span class="pre">fixed_point_iter()</span></code></a>,         <a class="reference external" href="https://torchdeq.readthedocs.io/en/latest/torchdeq/solver.html#torchdeq.solver.fp_iter.simple_fixed_point_iter" title="(in TorchDEQ)"><code class="xref py py-func docutils literal notranslate"><span class="pre">simple_fixed_point_iter()</span></code></a>,         <a class="reference external" href="https://torchdeq.readthedocs.io/en/latest/torchdeq/solver.html#torchdeq.solver.anderson.anderson_solver" title="(in TorchDEQ)"><code class="xref py py-func docutils literal notranslate"><span class="pre">anderson_solver()</span></code></a>, and <a class="reference external" href="https://torchdeq.readthedocs.io/en/latest/torchdeq/solver.html#torchdeq.solver.broyden.broyden_solver" title="(in TorchDEQ)"><code class="xref py py-func docutils literal notranslate"><span class="pre">broyden_solver()</span></code></a>.
+Default: <code class="docutils literal notranslate"><span class="pre">'fixed_point_iter'</span></code></p></li>
+<li><p><strong>f_max_iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum number of iterations for the solver really used         (see definition of the argument <code class="docutils literal notranslate"><span class="pre">f_solver</span></code> regarding when this value corresponds to the actual solver).
+Default: <code class="docutils literal notranslate"><span class="pre">51</span></code></p></li>
+<li><p><strong>f_tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Stop condition for the forward fixed point calculation for the solver really used         (see definition of the argument <code class="docutils literal notranslate"><span class="pre">f_solver</span></code> regarding when this value corresponds to the actual solver).
+Default: <code class="docutils literal notranslate"><span class="pre">1e-5</span></code></p></li>
+<li><p><strong>f_tau</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Float in the range <span class="math notranslate nohighlight">\((0.0, 1.0]\)</span>, or None. For the solver algorithms allowing so,         i.e. <code class="docutils literal notranslate"><span class="pre">'fixed_point_iter'</span></code>, <code class="docutils literal notranslate"><span class="pre">'simple_fixed_point_iter'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'anderson'</span></code>,         it servers as a dampening factor for the calculation. For the case of         <code class="docutils literal notranslate"><span class="pre">'broyden'</span></code>, however, no <code class="docutils literal notranslate"><span class="pre">f_tau</span></code> is used.
+Default: <code class="docutils literal notranslate"><span class="pre">1.0</span></code> (<code class="docutils literal notranslate"><span class="pre">None</span></code> for <code class="docutils literal notranslate"><span class="pre">'broyden'</span></code> solver).</p></li>
+<li><p><strong>surrogate_f_solver</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Value among <code class="docutils literal notranslate"><span class="pre">'fixed_point_iter'</span></code>, <code class="docutils literal notranslate"><span class="pre">'simple_fixed_point_iter'</span></code>, <code class="docutils literal notranslate"><span class="pre">'anderson'</span></code>, <code class="docutils literal notranslate"><span class="pre">'broyden'</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.         (see definition of the argument <code class="docutils literal notranslate"><span class="pre">f_solver</span></code> regarding when this value corresponds to the actual solver).
+Type of fixed point problem algorithm for the forward fixed point calculation, whose underlying solver         functions are, respectively, <a class="reference external" href="https://torchdeq.readthedocs.io/en/latest/torchdeq/solver.html#torchdeq.solver.fp_iter.fixed_point_iter" title="(in TorchDEQ)"><code class="xref py py-func docutils literal notranslate"><span class="pre">fixed_point_iter()</span></code></a>,         <a class="reference external" href="https://torchdeq.readthedocs.io/en/latest/torchdeq/solver.html#torchdeq.solver.fp_iter.simple_fixed_point_iter" title="(in TorchDEQ)"><code class="xref py py-func docutils literal notranslate"><span class="pre">simple_fixed_point_iter()</span></code></a>,         <a class="reference external" href="https://torchdeq.readthedocs.io/en/latest/torchdeq/solver.html#torchdeq.solver.anderson.anderson_solver" title="(in TorchDEQ)"><code class="xref py py-func docutils literal notranslate"><span class="pre">anderson_solver()</span></code></a>, and <a class="reference external" href="https://torchdeq.readthedocs.io/en/latest/torchdeq/solver.html#torchdeq.solver.broyden.broyden_solver" title="(in TorchDEQ)"><code class="xref py py-func docutils literal notranslate"><span class="pre">broyden_solver()</span></code></a>.
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>surrogate_f_max_iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum number of iterations for the surrogate solver         (see definition of the argument <code class="docutils literal notranslate"><span class="pre">f_solver</span></code> regarding when this value corresponds to the actual solver).
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>surrogate_f_tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Stop condition for the forward fixed point calculation for the surrogate solver         (see definition of the argument <code class="docutils literal notranslate"><span class="pre">f_solver</span></code> regarding when this value corresponds to the actual solver).
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>surrogate_f_tau</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Float in the range <span class="math notranslate nohighlight">\((0.0, 1.0]\)</span> (see the definition of <code class="docutils literal notranslate"><span class="pre">f_tau</span></code>).
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>b_solver</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Value among <code class="docutils literal notranslate"><span class="pre">'fixed_point_iter'</span></code>, <code class="docutils literal notranslate"><span class="pre">'simple_fixed_point_iter'</span></code>, <code class="docutils literal notranslate"><span class="pre">'anderson'</span></code>, <code class="docutils literal notranslate"><span class="pre">'broyden'</span></code>.         Type of fixed point problem algorithm for the fixed point calculation         used in the gradient calculation of the IFT. Default: <code class="docutils literal notranslate"><span class="pre">'fixed_point_iter'</span></code></p></li>
+<li><p><strong>b_max_iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Default: <code class="docutils literal notranslate"><span class="pre">40</span></code></p></li>
+<li><p><strong>b_tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Stop condition for the backward fixed point calculation. Default: <code class="docutils literal notranslate"><span class="pre">1e-6</span></code></p></li>
+<li><p><strong>abs_error_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – The absolute error threshold, measured as the norm of the error between f(x) and x,         for the fixed point calculation. Default: <code class="docutils literal notranslate"><span class="pre">1e-5</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.fixed_point.FixedPointLayer.b_solver">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">b_solver</span></span><a class="headerlink" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.b_solver" title="Link to this definition">¶</a></dt>
+<dd><p>Obtain the backward solver of the instance of the class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The solver.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.fixed_point.FixedPointLayer.batched_fixed_point">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">batched_fixed_point</span></span><a class="headerlink" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.batched_fixed_point" title="Link to this definition">¶</a></dt>
+<dd><p>Obtain whether the current type of fixed point calculation is batched or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.fixed_point.FixedPointLayer.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.eval" title="Link to this definition">¶</a></dt>
+<dd><p>Set the module in evaluation mode.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.fixed_point.FixedPointLayer.f_function_of_y_x_theta">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">f_function_of_y_x_theta</span></span><a class="headerlink" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.f_function_of_y_x_theta" title="Link to this definition">¶</a></dt>
+<dd><p>Obtain the current <code class="docutils literal notranslate"><span class="pre">f_function_of_y_x_theta</span></code> of the class for fixed-point calculations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><em>Callable</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.fixed_point.FixedPointLayer.f_solver">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">f_solver</span></span><a class="headerlink" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.f_solver" title="Link to this definition">¶</a></dt>
+<dd><p>Obtain the forward solver of the instance of the class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The solver.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.fixed_point.FixedPointLayer.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batched_fixed_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_tau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abs_error_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag_update_last_forward_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.forward" title="Link to this definition">¶</a></dt>
+<dd><p>Fixed-point
+The operation of the method depends on the state <a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.batched_fixed_point" title="modified_rf.fixed_point.fixed_point.FixedPointLayer.batched_fixed_point"><code class="xref py py-attr docutils literal notranslate"><span class="pre">batched_fixed_point</span></code></a> of the class and of the         dimensionality of <code class="docutils literal notranslate"><span class="pre">x</span></code>, or analogously on the argument <code class="docutils literal notranslate"><span class="pre">batched_fixed_point</span></code> overriding it:</p>
+<ul class="simple">
+<li><p>if <a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.batched_fixed_point" title="modified_rf.fixed_point.fixed_point.FixedPointLayer.batched_fixed_point"><code class="xref py py-attr docutils literal notranslate"><span class="pre">batched_fixed_point</span></code></a> is <code class="docutils literal notranslate"><span class="pre">False</span></code> then each (trailing) 3D element of <code class="docutils literal notranslate"><span class="pre">x</span></code> is subject to           an independent fixed-point problem;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">x.size(0)</span></code> = <code class="docutils literal notranslate"><span class="pre">y0.size(0)</span></code> <span class="math notranslate nohighlight">\(&gt; 1\)</span> then the <span class="math notranslate nohighlight">\(i\)</span>-th element of <code class="docutils literal notranslate"><span class="pre">y0</span></code> is regarded the initial point for the           <span class="math notranslate nohighlight">\(i\)</span>-th element of input <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></li>
+</ul>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>The function additionally provides a warning whenever the fixed point error, **         <a href="#id3"><span class="problematic" id="id4">**</span></a>measured as the norm of the error between f(x) and x, is above the threshold ** <code class="docutils literal notranslate"><span class="pre">abs_error_threshold</span></code>.         <a href="#id5"><span class="problematic" id="id6">**</span></a>Such warning is not returned but stored for explicit query, if desired, through the method **         <a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.get_last_forward_convergence_info" title="modified_rf.fixed_point.fixed_point.FixedPointLayer.get_last_forward_convergence_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_last_forward_convergence_info()</span></code></a>. In fact,         the function generates, apart from the returned fixed point, the following data available through
+<a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.get_last_forward_convergence_info" title="modified_rf.fixed_point.fixed_point.FixedPointLayer.get_last_forward_convergence_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_last_forward_convergence_info()</span></code></a>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the boolean Tensor indicating whether the returned fixed point  (for each input datapoint) was achieved               with satisfactory absolute error/convergence;,</p></li>
+<li><p>the abs_error threshold used for the above assessment, ‘self._last_forward_abs_error_threshold’,</p></li>
+<li><p>the batched-fixed-point flag used for the calculation, ‘self._last_forward_batched_fixed_point’; and</p></li>
+<li><p>the info (about trajectories) for the last calculations.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>)</p></li>
+<li><p><strong>y0</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a><em>, </em><em>optional</em>) – It overrides, if provided, the value provided or initialised in the constructor.
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>batched_fixed_point</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – It overrides, if provided, the value currently in the corresponding attribute             <a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.batched_fixed_point" title="modified_rf.fixed_point.fixed_point.FixedPointLayer.batched_fixed_point"><code class="xref py py-attr docutils literal notranslate"><span class="pre">batched_fixed_point</span></code></a> of the class, without changing said attribute.             If <code class="docutils literal notranslate"><span class="pre">None</span></code> the mode currently indicated by the attribute is used.             Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>f_tau</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Float in the range <span class="math notranslate nohighlight">\((0.0, 1.0]\)</span>; if provided (i.e. not <code class="docutils literal notranslate"><span class="pre">None</span></code>),             and for the solver algorithms allowing so, it overrides the value <span class="math notranslate nohighlight">\(\tau\)</span> provided in the constructor (see
+<a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer" title="modified_rf.fixed_point.fixed_point.FixedPointLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">FixedPointLayer</span></code></a>) during the current evaluation.
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>abs_error_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – The absolute error threshold, measured as the norm of the error between f(x) and x,             for the fixed point calculation.             If <code class="docutils literal notranslate"><span class="pre">None</span></code> the mode currently indicated by the attribute is used.
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>flag_update_last_forward_info</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the information about the last forward calculation is updated,             otherwise it is not updated.
+Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output of the layer, that is, the fixed point of the layer for the input <cite>x</cite> and
+the (current) parameters <cite>theta</cite> of the layer</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)">torch.Tensor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.fixed_point.FixedPointLayer.get_last_forward_convergence_info">
+<span class="sig-name descname"><span class="pre">get_last_forward_convergence_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.get_last_forward_convergence_info" title="Link to this definition">¶</a></dt>
+<dd><p>Get the convergence information for the last <a class="reference internal" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.forward" title="modified_rf.fixed_point.fixed_point.FixedPointLayer.forward"><code class="xref py py-meth docutils literal notranslate"><span class="pre">forward()</span></code></a> fixed point calculation.         If no calculation has been performed by the object so far <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>warning_above_threshold_y_out</strong> (<em>torch.Tensor</em>) – Tensor of bools indicating whether the corresponding image has reached a fixed point             with an absolute error above the threshold <code class="docutils literal notranslate"><span class="pre">abs_error_threshold</span></code></p></li>
+<li><p><strong>last_forward_abs_error_threshold</strong> (<em>float</em>) – The absolute error threshold used for the fixed point calculation.</p></li>
+<li><p><strong>info</strong> (<em>torchdeq.SolverStat or list[torchdeq.SolverStat], optional</em>) – Info regarding the optimization process is to be returned as well.             The <a class="reference external" href="https://github.com/locuslab/torchdeq/blob/main/torchdeq/core.py#L561">forward method of torchdeq.DEQIndexing</a>             returns a dict-like <a class="reference external" href="https://github.com/locuslab/torchdeq/blob/main/torchdeq/solver/stat.py#L4">SolverStat object</a>             containing information about the optimization process. If the option is <code class="docutils literal notranslate"><span class="pre">True</span></code>, along with the output of             the layer, such <code class="docutils literal notranslate"><span class="pre">info</span></code> is returned.             <strong>Important</strong>: Said returned <code class="docutils literal notranslate"><span class="pre">info</span></code> is one single dictionary SolverStat if <em>batched_fixed_point</em>             is used, but a list of B SolverStats, each SolverStat corresponding to each input point, if             <em>batched_fixed_point</em> is not used.</p></li>
+<li><p><strong>last_forward_batched_fixed_point</strong> (<em>bool</em>) – If batched fixed point calculation was used.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.fixed_point.FixedPointLayer.surrogate_f_solver">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">surrogate_f_solver</span></span><a class="headerlink" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.surrogate_f_solver" title="Link to this definition">¶</a></dt>
+<dd><p>Obtain the forward solver of the instance of the class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The solver.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.fixed_point.FixedPointLayer.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.fixed_point.fixed_point.FixedPointLayer.train" title="Link to this definition">¶</a></dt>
+<dd><p>Set the module in training mode.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.fixed_point.full_jacobian_matrix">
+<span class="sig-name descname"><span class="pre">full_jacobian_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.fixed_point.fixed_point.full_jacobian_matrix" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the Jacobian matrix for the output (tensor) “f_x” which is related, through some function, to “x”.</p>
+<p><em>WARNING</em>: If either “f_x” or “x” is (or both are) 1D then the resulting Jacobian is a vector;
+in that case the returned tensor is a vector = a tensor of dimension 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Description of f_x</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Description of x</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Description of the returned Jacobian matrix</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)">torch.Tensor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-modified_rf.fixed_point.redefinition_of_torchdeq_functions">
+<span id="modified-rf-fixed-point-redefinition-of-torchdeq-functions-module"></span><h2>modified_rf.fixed_point.redefinition_of_torchdeq_functions module<a class="headerlink" href="#module-modified_rf.fixed_point.redefinition_of_torchdeq_functions" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.redefinition_of_torchdeq_functions.my_torchdeq_solver_broyden_line_search">
+<span class="sig-name descname"><span class="pre">my_torchdeq_solver_broyden_line_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nstep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.fixed_point.redefinition_of_torchdeq_functions.my_torchdeq_solver_broyden_line_search" title="Link to this definition">¶</a></dt>
+<dd><p>This function re-writes the original function <code class="xref py py-func docutils literal notranslate"><span class="pre">torchdeq.solver.broyden.line_search()</span></code> which,     whenever any of the entries of the optimization direction <cite>update</cite> is NaN, propagates the NaN to the     updated value. Our modification detects when an entry is NaN, in that case, makes that variation zero.</p>
+<p>The following is exactly the documentation of the original function     <code class="xref py py-func docutils literal notranslate"><span class="pre">torchdeq.solver.broyden.line_search()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>`update` is the propsoed direction of update.
+
+Code adapted from scipy.
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>update</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>)</p></li>
+<li><p><strong>x0</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>)</p></li>
+<li><p><strong>g0</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>)</p></li>
+<li><p><strong>g</strong> (<em>callable</em>)</p></li>
+<li><p><strong>nstep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>on</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)">torch.Tensor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.fixed_point.redefinition_of_torchdeq_functions.my_torchdeq_solver_utils_batch_masked_mixing">
+<span class="sig-name descname"><span class="pre">my_torchdeq_solver_utils_batch_masked_mixing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_var</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.fixed_point.redefinition_of_torchdeq_functions.my_torchdeq_solver_utils_batch_masked_mixing" title="Link to this definition">¶</a></dt>
+<dd><p>This function re-writes the original function <code class="xref py py-func docutils literal notranslate"><span class="pre">torchdeq.solver.utils.batch_masked_mixing()</span></code> which,     whenever any of the entries of the input contained any NaN, let the NaN go through even if the mask <code class="docutils literal notranslate"><span class="pre">mask</span></code>     would not be such that such value should go through: that behavior causes problems e.g. using Broyden’s solver,     which as implemented in TorchDEQ might generate NaN values, in the function     <code class="xref py py-func docutils literal notranslate"><span class="pre">torchdeq.solver.utils.update_state()</span></code>.</p>
+<p>The following is exactly the documentation of the original function     <code class="xref py py-func docutils literal notranslate"><span class="pre">torchdeq.solver.utils.batch_masked_mixing()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Applies a mask to ``mask_var`` and the inverse of the mask to ``orig_var``, then sums the result.
+
+Helper function. First aligns the axes of mask to mask_var.
+Then mixes mask_var and orig_var through the aligned mask.
+
+Args:
+    mask (torch.Tensor): A tensor of shape (B,).
+    mask_var (torch.Tensor): A tensor of shape (B, ...) for the mask to select.
+    orig_var (torch.Tensor): A tensor of shape (B, ...) for the reversed mask to select.
+
+Returns:
+    torch.Tensor: A tensor resulting from the masked mixture of ``mask_var`` and ``orig_var``.
+
+Example:
+    mask = torch.tensor([True, False])
+    mask_var = torch.tensor([[1, 2], [3, 4]])
+    orig_var = torch.tensor([[5, 6], [7, 8]])
+    result = batch_masked_mixing(mask, mask_var, orig_var)
+    result
+        tensor([[1, 2],
+                [7, 8]])`
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Tensor of bool values ruling the selection of the values from mask_var and orig_var.</p></li>
+<li><p><strong>mask_var</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Tensor of values to be selected when the mask is True. If it is a tensor its size must fit that of /
+the variable <code class="docutils literal notranslate"><span class="pre">mask</span></code></p></li>
+<li><p><strong>orig_var</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Tensor of values to be selected when the mask is True. If it is a tensor its size must fit that of /
+the variable <code class="docutils literal notranslate"><span class="pre">mask</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)">torch.Tensor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-modified_rf.fixed_point">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-modified_rf.fixed_point" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="modified_rf.calculus.html">modified_rf.calculus package</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="modified_rf.memory_handling.html">modified_rf.memory_handling package</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Raul Mohedano.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

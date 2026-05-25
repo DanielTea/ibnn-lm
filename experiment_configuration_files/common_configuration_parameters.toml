@@ -1,0 +1,111 @@
+# demo_sm_vs_ibnn_lite_base.toml
+
+[dataset]
+  name = "svhn"
+  colorspace = "rgb"
+  force_im_size = false
+  train_proportion = 1.0
+  val_proportion = 0.0
+  batch_size = 128
+  num_workers = 4
+  generator_seed = false
+  root_folder = "../data/"
+
+[classifier]
+  net = "multi_layer"
+  conv_like_type = "sm" # overridden by GROUP
+  conv_like_type_position = "everywhere"
+  prenormalization = false
+
+  [classifier.architecture_specific]
+    [classifier.architecture_specific.multi_layer]
+      num_conv_like_layers = 2
+      channels_per_conv_layer = [3, 3]
+      m_kernel_size_per_conv_layer = false
+      phi_activation_per_conv_layer = false
+      batch_normalization_per_conv_layer = false
+      maxpool_reduction_per_conv_block = false
+
+  [classifier.fully_connected]
+    fc_num_layers = 1
+    fc_num_units_intermediate_layers = -1
+    fc_batch_normalization = true
+    fc_dropout = 0.0
+    penciled_decision = false
+    softmax_output = false
+
+  [classifier.conv_like_layer]
+    [classifier.conv_like_layer.traditional]
+      overall_m_kernel_size_conv_layers = 0.15
+      overall_phi_activation_conv_layers = "relu"
+      overall_batch_normalization_conv_layers = true
+      overall_maxpool_reduction_conv_blocks = 1
+      m_independent_channels = false
+      m_padding = "same"
+      m_padding_mode = "zeros"
+      m_initialization = "zeros"
+      m_trainable = true
+      b_type = "scalar_per_channel"
+      initial_b = 0.0
+      b_trainable = true
+
+    [classifier.conv_like_layer.nonlinear_bias]
+      sigma_activation = "tanh"
+      sigma_x_compress = 10.0
+      sigma_y_stretch = 1.0
+      sigma_x_offset = 0.0
+      sigma_y_offset = 0.0
+      sigma_x_compress_trainable = false
+      sigma_y_stretch_trainable = false
+      sigma_x_offset_trainable = false
+      sigma_y_offset_trainable = false
+      lambda_type = "scalar"
+      initial_lambda = 0.0
+      lambda_trainable = true
+      w_kernel_size = 0
+      w_independent_channels = true
+      w_padding_mode = "zeros"
+      w_initialization = {initialization_type = "ones", normalization = "full"}
+      w_trainable = false
+
+      [classifier.conv_like_layer.nonlinear_bias.cross_conv_computation]
+        calculation_mode = "interpolated"
+        num_sampling_points = 11
+        range_std_sigma = [-4.0, 4.0]
+        memory_saving_version = true
+
+    [classifier.conv_like_layer.fixed_point]
+      batched_fixed_point = true
+      f_tau = 0.1                       # float or false (which means leave the default value)
+      f_solver = "broyden"              # "fixed_point_iter", "anderson", "broyden", "fpgd" and "pgd"
+      f_max_iter = 20                   # int of false, e.g. 50
+      f_tol = 1e-6                     # float or false, e.g. 1e-5
+      b_solver = "broyden"              # "fixed_point_iter", "anderson", "broyden"
+      b_max_iter = false                # int of false, e.g. 40
+      b_tol = 1e-4                     # float or false, e.g. 1e-6
+      abs_error_threshold = 1e-4       # float or false, e.g. 1e-5,
+
+
+[training]
+  maximum_epochs = 10
+  loss_function = "cross_entropy"
+  validations_per_epoch = 2
+  validation_on_test_subset = true
+  early_stop_epochs = false
+  epochs_sm_based_warmup = 2
+  min_acc_threshold = false
+  max_number_of_retries = false
+
+  [training.optimizer]
+    type = "sgd"
+    initial_lr = 0.01
+    arguments = {momentum = 0.9}
+
+  [training.scheduler]
+    type = "linear_warmup"
+    arguments = {factor = 0.1, total_iters = 5}
+
+  [training.adversarial]
+    type = false
+    arguments = false
+    proportion = false

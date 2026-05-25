@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>modified_rf.calculus package &#8212; project-rf-comparison 0.5 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=dfa0e015" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+    <script src="_static/documentation_options.js?v=db78e746"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="modified_rf.fixed_point package" href="modified_rf.fixed_point.html" />
+    <link rel="prev" title="modified_rf package" href="modified_rf.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>project-rf-comparison 0.5 documentation</span></a></h1>
+        <h2 class="heading"><span>modified_rf.calculus package</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="modified_rf.html">modified_rf package</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="modified_rf.fixed_point.html">modified_rf.fixed_point package</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="modified-rf-calculus-package">
+<h1>modified_rf.calculus package<a class="headerlink" href="#modified-rf-calculus-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-modified_rf.calculus.calculus">
+<span id="modified-rf-calculus-calculus-module"></span><h2>modified_rf.calculus.calculus module<a class="headerlink" href="#module-modified_rf.calculus.calculus" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.autograd_jacobian_matrix_black_box_im_format">
+<span class="sig-name descname"><span class="pre">autograd_jacobian_matrix_black_box_im_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.autograd_jacobian_matrix_black_box_im_format" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the full Jacobian matrix for the relationship <span class="math notranslate nohighlight">\(\mathrm{Z} = \mathrm{F}(\mathrm{I})\)</span>, wherein     said functional relationship is encoded (as black box) by a <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a> (or another     <cite>autograd</cite>-friendly relationship). The format of the output Jacobian tensor is identical to that of     <a class="reference internal" href="#modified_rf.calculus.calculus.manual_jacobian_matrix_black_box_im_format" title="modified_rf.calculus.calculus.manual_jacobian_matrix_black_box_im_format"><code class="xref py py-func docutils literal notranslate"><span class="pre">manual_jacobian_matrix_black_box_im_format()</span></code></a>: refer to the latter for further information.</p>
+<p>This function is relevant since <cite>autograd</cite> (as well as other frameworks) does not calculate the full Jacobian     but vector-Jacobian products (VJPs) instead. The full Jacobian matrix is therefore calculated by calculating     multiple VJPs and packing the result as a single matrix (tensor).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>F</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a> or ~collections.abc.Callable) – The (image-to-image) function whose Jacobian is calculated. <code class="docutils literal notranslate"><span class="pre">F</span></code> can be a
+~collections.abc.Callable, if allowing autograd; it can indeed be a <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a> object,         since its direct evaluation (using parenthesis) would call its method <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.forward" title="(in PyTorch v2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.nn.Module.forward()</span></code></a>.</p></li>
+<li><p><strong>I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Input image at which the Jacobian is calculated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>jacobian_im_tensor</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – Returned Jacobian tensor: matrix due to the vector structure of input and output</p></li>
+<li><p><strong>F_I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – F(I)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.autograd_jacobian_matrix_black_box_vec_format">
+<span class="sig-name descname"><span class="pre">autograd_jacobian_matrix_black_box_vec_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.autograd_jacobian_matrix_black_box_vec_format" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the full Jacobian matrix (tensor) <span class="math notranslate nohighlight">\(\mathrm{D}F\)</span> for the function <code class="docutils literal notranslate"><span class="pre">F</span></code>, that is, <span class="math notranslate nohighlight">\(F(\mathrm{I})\)</span>,     transforming images into images, at the input image <code class="docutils literal notranslate"><span class="pre">I</span></code>, <strong>wherein the resulting Jacobian tensor is formatted
+as a 2D matrix corresponding to the input and output images vectorized as column-major order     (or, respectively, row-major order) even thought</strong> <code class="docutils literal notranslate"><span class="pre">F</span></code> <strong>and</strong> <code class="docutils literal notranslate"><span class="pre">I</span></code>     <strong>work with/are image (not vectorized) format</strong>.</p>
+<p>This function is based directly on <a class="reference internal" href="#modified_rf.calculus.calculus.autograd_jacobian_matrix_black_box_im_format" title="modified_rf.calculus.calculus.autograd_jacobian_matrix_black_box_im_format"><code class="xref py py-func docutils literal notranslate"><span class="pre">autograd_jacobian_matrix_black_box_im_format()</span></code></a>     (it is advisable to read its corresponding documentation for additional information) and simply     reorders its returned elements according to the selected vectorized image order <code class="docutils literal notranslate"><span class="pre">order</span></code>. The order <code class="docutils literal notranslate"><span class="pre">'col'</span></code>,     considered as default, traces column-wise each image channel; the order <code class="docutils literal notranslate"><span class="pre">'row'</span></code>, instead, row-wise     (see <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Row-_and_column-major_order&amp;oldid=1226393111">Wiki</a>).</p>
+<p><strong>Warning:</strong> <strong>PyTorch appears to work naturally using raw-major order: this might have an impact     on the performance of this function if used in column-major order and depending on the application!</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>F</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><em>Callable</em></a>) – The (image-to-image) function whose Jacobian is calculated. <code class="docutils literal notranslate"><span class="pre">F</span></code> can indeed be a <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a>         object, since directly evaluating it using parenthesis would call its <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.forward" title="(in PyTorch v2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.nn.Module.forward()</span></code></a></p></li>
+<li><p><strong>I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Input image at which the Jacobian is calculated.</p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Value among  <code class="docutils literal notranslate"><span class="pre">‘col’</span></code> and <code class="docutils literal notranslate"><span class="pre">‘row’</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">‘col’</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>jacobian_vec_tensor</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – Returned Jacobian tensor: matrix due to the vector structure of input and output</p></li>
+<li><p><strong>F_I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – F(I)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.full_jacobian_matrix">
+<span class="sig-name descname"><span class="pre">full_jacobian_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.full_jacobian_matrix" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the full Jacobian matrix for the relationship <span class="math notranslate nohighlight">\(\mathbf{y} = \mathbf{f}(\mathbf{x})\)</span>, wherein     said functional relationship is encoded (as black box) by a <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a> (or another     <cite>autograd</cite>-friendly relationship).</p>
+<p>This function is relevant since <cite>autograd</cite> (as well as other frameworks) does not calculate the full Jacobian     but vector-Jacobian products (VJPs) instead. The full Jacobian matrix is therefore calculated by calculating     multiple VJPs and packing the result as a single matrix (tensor).</p>
+<p><strong>WARNING</strong>: If either the tensor <code class="docutils literal notranslate"><span class="pre">f_x</span></code> or <code class="docutils literal notranslate"><span class="pre">x</span></code> is (or both are) 1D then the resulting Jacobian matrix     is a vector; in that case the returned tensor is a vector, <em>i.e.</em> a tensor of dimension 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f_x</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Description of f_x</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Description of x</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Description of the returned Jacobian matrix</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)">torch.Tensor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.im2vec_format">
+<span class="sig-name descname"><span class="pre">im2vec_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">I_in_im_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.im2vec_format" title="Link to this definition">¶</a></dt>
+<dd><p>Formatting an image, the tensor <code class="docutils literal notranslate"><span class="pre">I_in_im_format</span></code>, of 2D or 3D (depending on whether it is multichannel)     in vectorized format following <code class="docutils literal notranslate"><span class="pre">order</span></code>-major order: respectively, column-major or     row-major order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>I_in_im_format</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>)</p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Value among  <code class="docutils literal notranslate"><span class="pre">‘col’</span></code> and <code class="docutils literal notranslate"><span class="pre">‘row’</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">‘col’</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>im_in_vec_format</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)">torch.Tensor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.manual_jacobian_matrices_IBNN_vec_format">
+<span class="sig-name descname"><span class="pre">manual_jacobian_matrices_IBNN_vec_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IBNNInternalLayer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">component_jacobians</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.manual_jacobian_matrices_IBNN_vec_format" title="Link to this definition">¶</a></dt>
+<dd><p>This function returns the different Jacobian matrices, evaluated at the respective input values, of the building     sub-operations composing the operation of ibnn_internal, to wit: <span class="math notranslate nohighlight">\(\Phi\)</span>, <span class="math notranslate nohighlight">\(A\)</span>, and <span class="math notranslate nohighlight">\(B\)</span>, wherein</p>
+<p>In greater detail: the later obtains the fixed point solution
+<div class="math notranslate nohighlight">
+\[\mathrm{ibnn_internal}(\mathrm{I}) = \mathrm{U}^* | \mathrm{U}^* = F_(\mathbf{I}, \mathrm{U}^*; \Theta)\]</div>
+</p>
+<p>for</p>
+<p><div class="math notranslate nohighlight">
+\[
+F(\mathrm{I}, \mathrm{U}; \Theta) = \Phi \Big(A(\mathrm{I}) - \lambda B \big(A(\mathrm{I})\big)\Big) .
+\]</div>
+</p>
+<p>wherein, and including the dependency on</p>
+<p><div class="math notranslate nohighlight">
+\[
+\Phi(\mathrm{V})(\mathbf{p}) = \phi \big( \mathrm{V}(\mathbf{p}) \big) ,
+\]</div>
+</p>
+<p><div class="math notranslate nohighlight">
+\[
+A(\mathrm{I}; \Theta)(\mathbf{p}) =
+\sum_{\mathbf{r}} \mathrm{M}_\mathbf{p}(\mathbf{r}) \mathrm{I}(\mathbf{p}) - {b}_\mathbf{p} ,
+\]</div>
+</p>
+<p><div class="math notranslate nohighlight">
+\[
+B(\mathrm{U}; \Theta)(\mathbf{p}) =
+\sum_{\mathbf{r}} \mathrm{\Omega}_\mathbf{p}(\mathbf{r}) \,
+\mathbf{\sigma} \big( \mathrm{U}(\mathbf{r}) - \mathrm{U}(\mathbf{p}) \big) .
+\]</div>
+</p>
+<p>The function returns three elements, wherein the latter is only calculated when the argument     <code class="docutils literal notranslate"><span class="pre">component_jacobians</span></code>, by default <code class="docutils literal notranslate"><span class="pre">False</span></code>, is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>:     the complete <code class="docutils literal notranslate"><span class="pre">jacobian_vec_tensor</span></code> of the complete transformation     (for images in vectorized format following <code class="docutils literal notranslate"><span class="pre">order</span></code>-major order), the output <code class="docutils literal notranslate"><span class="pre">F_I</span></code>     of the complete transformation in image/matrix format, and a dictionary <code class="docutils literal notranslate"><span class="pre">dict_component_jacobians</span></code>     with the respective Jacobian matrices/derivatives of the composing operations     composed of the following fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DA</span></code>, corresponding to the Jacobian matrix of <span class="math notranslate nohighlight">\(A\)</span> evaluated at <span class="math notranslate nohighlight">\(\mathrm{I}\)</span>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DB</span></code>, corresponding to the Jacobian matrix of <span class="math notranslate nohighlight">\(B\)</span> evaluated at <span class="math notranslate nohighlight">\(A(\mathrm{I})\)</span>; and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DPhi</span></code>, corresponding to the Jacobian matrix of <span class="math notranslate nohighlight">\(\Phi\)</span>       evaluated at <span class="math notranslate nohighlight">\(A(\mathrm{I}) - \lambda B \big( A(\mathrm{I}) \big)\)</span>; and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jacobian_vec_tensor_multiplied_manually</span></code> (only if <span class="math notranslate nohighlight">\(\lambda\)</span> and <em>b</em> are scalars), the Jacobian matrix       resulting from the manual multiplication of the component Jacobian matrices       according to its theoretical derivation.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>IBNNInternalLayer</strong> (<a class="reference internal" href="modified_rf.nn_layers.html#modified_rf.nn_layers.core.IBNNInternalLayer" title="modified_rf.nn_layers.core.IBNNInternalLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">IBNNInternalLayer</span></code></a>) – The IBNNLiteLayer for the calculation</p></li>
+<li><p><strong>I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Input image at which the Jacobian is calculated.</p></li>
+<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Step for the 2-point estimator of the partial derivative. Default: <code class="docutils literal notranslate"><span class="pre">1e-3</span></code></p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Value among  <code class="docutils literal notranslate"><span class="pre">‘col’</span></code> and <code class="docutils literal notranslate"><span class="pre">‘row’</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">‘col’</span></code></p></li>
+<li><p><strong>component_jacobians</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Required calculation of the dictionary <code class="docutils literal notranslate"><span class="pre">dict_component_jacobians</span></code> or not. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>sparse_result</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Output as sparse tensor or not. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>device_result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><em>None</em>) – Value among <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">'cpu'</span></code>, <code class="docutils literal notranslate"><span class="pre">'cuda'</span></code>: <code class="docutils literal notranslate"><span class="pre">None</span></code> respects the inherent output of the layer for which         the Jacobian matrices are calculated. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>jacobian_vec_tensor</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – Returned Jacobian tensor: matrix due to the vector structure of input and output</p></li>
+<li><p><strong>U_ast</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – <code class="docutils literal notranslate"><span class="pre">ibnn_internal</span></code> (<code class="docutils literal notranslate"><span class="pre">I</span></code>)</p></li>
+<li><p><strong>dict_component_jacobians</strong> (dict[<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>]) – Dictionary with the tensors <code class="docutils literal notranslate"><span class="pre">DA</span></code>, <code class="docutils literal notranslate"><span class="pre">DB</span></code>, <code class="docutils literal notranslate"><span class="pre">DPhi</span></code> corresponding to inputs-outputs in <code class="docutils literal notranslate"><span class="pre">order</span></code>-major order,         and <code class="docutils literal notranslate"><span class="pre">jacobian_vec_tensor_multiplied_manually</span></code> (only if <span class="math notranslate nohighlight">\(\lambda\)</span> and <em>b</em> are scalars)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.manual_jacobian_matrices_ibnn_lite_vec_format">
+<span class="sig-name descname"><span class="pre">manual_jacobian_matrices_ibnn_lite_vec_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IBNNLiteLayer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">component_jacobians</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.manual_jacobian_matrices_ibnn_lite_vec_format" title="Link to this definition">¶</a></dt>
+<dd><p>This function returns the different Jacobian matrices, evaluated at the respective input values, of the building     sub-operations composing the operation of ibnn_lite, to wit: <span class="math notranslate nohighlight">\(\Phi\)</span>, <span class="math notranslate nohighlight">\(A\)</span>, and <span class="math notranslate nohighlight">\(B\)</span>, wherein</p>
+<p><div class="math notranslate nohighlight">
+\[\mathrm{ibnn_lite}(\mathrm{I}) = \Phi \Big( A(\mathrm{I}) - \lambda B \big( A(\mathrm{I}) \big) \Big) ,\]</div>
+</p>
+<p>wherein, and including the dependency on     <span class="math notranslate nohighlight">\(\Theta = (\mathrm{M}_\mathbf{p}, {b}_\mathbf{p}, \lambda, \mathrm{\Omega}_\mathbf{p})\)</span>,</p>
+<p><div class="math notranslate nohighlight">
+\[
+\Phi(\mathrm{V})(\mathbf{p}) = \phi \big( \mathrm{V}(\mathbf{p}) \big) ,
+\]</div>
+</p>
+<p><div class="math notranslate nohighlight">
+\[
+A(\mathrm{I}; \Theta)(\mathbf{p}) =
+\sum_{\mathbf{r}} \mathrm{M}_\mathbf{p}(\mathbf{r}) \mathrm{I}(\mathbf{p}) - {b}_\mathbf{p} ,
+\]</div>
+</p>
+<p><div class="math notranslate nohighlight">
+\[
+B(\mathrm{U}; \Theta)(\mathbf{p}) =
+\sum_{\mathbf{r}} \mathrm{\Omega}_\mathbf{p}(\mathbf{r}) \,
+\mathbf{\sigma} \big( \mathrm{U}(\mathbf{r}) - \mathrm{U}(\mathbf{p}) \big) .
+\]</div>
+</p>
+<p>The function returns three elements, wherein the latter is only calculated when the argument     <code class="docutils literal notranslate"><span class="pre">component_jacobians</span></code>, by default <code class="docutils literal notranslate"><span class="pre">False</span></code>, is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>:
+the complete <code class="docutils literal notranslate"><span class="pre">jacobian_vec_tensor</span></code> of the complete transformation     (for images in vectorized format following <code class="docutils literal notranslate"><span class="pre">order</span></code>-major order), the output <code class="docutils literal notranslate"><span class="pre">F_I</span></code>     of the complete transformation in image/matrix format, and a dictionary <code class="docutils literal notranslate"><span class="pre">dict_component_jacobians</span></code>     with the respective Jacobian matrices/derivatives of the composing operations     composed of the following fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DA</span></code>, corresponding to the Jacobian matrix of <span class="math notranslate nohighlight">\(A\)</span> evaluated at <span class="math notranslate nohighlight">\(\mathrm{I}\)</span>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DB</span></code>, corresponding to the Jacobian matrix of <span class="math notranslate nohighlight">\(B\)</span> evaluated at <span class="math notranslate nohighlight">\(A(\mathrm{I})\)</span>; and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DPhi</span></code>, corresponding to the Jacobian matrix of <span class="math notranslate nohighlight">\(\Phi\)</span>       evaluated at <span class="math notranslate nohighlight">\(A(\mathrm{I}) - \lambda B \big( A(\mathrm{I}) \big)\)</span>; and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jacobian_vec_tensor_multiplied_manually</span></code> (only if <span class="math notranslate nohighlight">\(\lambda\)</span> and <em>b</em> are scalars), the Jacobian matrix       resulting from the manual multiplication of the component Jacobian matrices       according to its theoretical derivation.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>IBNNLiteLayer</strong> (<a class="reference internal" href="modified_rf.nn_layers.html#modified_rf.nn_layers.core.IBNNLiteLayer" title="modified_rf.nn_layers.core.IBNNLiteLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">IBNNLiteLayer</span></code></a>) – The IBNNLiteLayer for the calculation</p></li>
+<li><p><strong>I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Input image at which the Jacobian is calculated.</p></li>
+<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Step for the 2-point estimator of the partial derivative. Default: <code class="docutils literal notranslate"><span class="pre">1e-3</span></code></p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Value among  <code class="docutils literal notranslate"><span class="pre">‘col’</span></code> and <code class="docutils literal notranslate"><span class="pre">‘row’</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">‘col’</span></code></p></li>
+<li><p><strong>component_jacobians</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Required calculation of the dictionary <code class="docutils literal notranslate"><span class="pre">dict_component_jacobians</span></code> or not. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>sparse_result</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Output as sparse tensor or not. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>device_result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><em>None</em>) – Value among <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">'cpu'</span></code>, <code class="docutils literal notranslate"><span class="pre">'cuda'</span></code>: <code class="docutils literal notranslate"><span class="pre">None</span></code> respects the inherent output of the layer for which         the Jacobian matrices are calculated. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>jacobian_vec_tensor</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – Returned Jacobian tensor: matrix due to the vector structure of input and output</p></li>
+<li><p><strong>ibnn_lite_I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – <code class="docutils literal notranslate"><span class="pre">IBNNLiteLayer</span></code> (<code class="docutils literal notranslate"><span class="pre">I</span></code>)</p></li>
+<li><p><strong>dict_component_jacobians</strong> (dict[<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>]) – Dictionary with the tensors <code class="docutils literal notranslate"><span class="pre">DA</span></code>, <code class="docutils literal notranslate"><span class="pre">DB</span></code>, <code class="docutils literal notranslate"><span class="pre">DPhi</span></code> corresponding to inputs-outputs in <code class="docutils literal notranslate"><span class="pre">order</span></code>-major order,         and <code class="docutils literal notranslate"><span class="pre">jacobian_vec_tensor_multiplied_manually</span></code> (only if <span class="math notranslate nohighlight">\(\lambda\)</span> and <em>b</em> are scalars)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.manual_jacobian_matrices_SM_vec_format">
+<span class="sig-name descname"><span class="pre">manual_jacobian_matrices_SM_vec_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smlayer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">component_jacobians</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.manual_jacobian_matrices_SM_vec_format" title="Link to this definition">¶</a></dt>
+<dd><p>This function returns the different Jacobian matrices, evaluated at the respective input values, of the building     sub-operations composing the operation of the Standard Model (SM), to wit: <span class="math notranslate nohighlight">\(\Phi\)</span> and <span class="math notranslate nohighlight">\(A\)</span>, wherein</p>
+<p><div class="math notranslate nohighlight">
+\[\mathrm{SM}(\mathrm{I}) = \Phi \big( A(\mathrm{I}) \big) ,\]</div>
+</p>
+<p>wherein, and including the dependency on     <span class="math notranslate nohighlight">\(\Theta = (\mathrm{M}_\mathbf{p}, {b}_\mathbf{p})\)</span>,</p>
+<p><div class="math notranslate nohighlight">
+\[
+\Phi(\mathrm{I})(\mathbf{p}) = \phi \big( \mathrm{I}(\mathbf{p}) \big) ,
+\]</div>
+</p>
+<p><div class="math notranslate nohighlight">
+\[
+A(\mathrm{I}; \Theta)(\mathbf{p}) =
+\sum_{\mathbf{r}} \mathrm{M}_\mathbf{p}(\mathbf{r}) \mathrm{I}(\mathbf{p}) - {b}_\mathbf{p} .
+\]</div>
+</p>
+<p>The function returns three elements, wherein the latter is only calculated when the argument     <code class="docutils literal notranslate"><span class="pre">component_jacobians</span></code>, by default <code class="docutils literal notranslate"><span class="pre">False</span></code>, is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>:     the complete <code class="docutils literal notranslate"><span class="pre">jacobian_vec_tensor</span></code> of the complete transformation     (for images in vectorized format following <code class="docutils literal notranslate"><span class="pre">order</span></code>-major order), the output <code class="docutils literal notranslate"><span class="pre">F_I</span></code>     of the complete transformation in image/matrix format, and a dictionary <code class="docutils literal notranslate"><span class="pre">dict_component_jacobians</span></code>     with the respective Jacobian matrices/derivatives of the composing operations     composed of the following fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DA</span></code>, corresponding to the Jacobian matrix of <span class="math notranslate nohighlight">\(A\)</span> evaluated at <span class="math notranslate nohighlight">\(\mathrm{I}\)</span>; and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DPhi</span></code>, corresponding to the Jacobian matrix of <span class="math notranslate nohighlight">\(\Phi\)</span>       evaluated at <span class="math notranslate nohighlight">\(A(\mathrm{I}) - \lambda B \big( A(\mathrm{I}) \big)\)</span>; and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jacobian_vec_tensor_multiplied_manually</span></code> (only if <em>b</em> is scalar), the Jacobian matrix       resulting from the manual multiplication of the component Jacobian matrices       according to its theoretical derivation.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>smlayer</strong> (<a class="reference internal" href="modified_rf.nn_layers.html#modified_rf.nn_layers.core.SMLayer" title="modified_rf.nn_layers.core.SMLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMLayer</span></code></a>) – The SMLayer for the calculation</p></li>
+<li><p><strong>I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Input image at which the Jacobian is calculated.</p></li>
+<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Step for the 2-point estimator of the partial derivative. Default: <code class="docutils literal notranslate"><span class="pre">1e-3</span></code></p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Value among  <code class="docutils literal notranslate"><span class="pre">‘col’</span></code> and <code class="docutils literal notranslate"><span class="pre">‘row’</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">‘col’</span></code></p></li>
+<li><p><strong>component_jacobians</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Required calculation of the dictionary <code class="docutils literal notranslate"><span class="pre">dict_component_jacobians</span></code> or not. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>sparse_result</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Output as sparse tensor or not. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>device_result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><em>None</em>) – Value among <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">'cpu'</span></code>, <code class="docutils literal notranslate"><span class="pre">'cuda'</span></code>: <code class="docutils literal notranslate"><span class="pre">None</span></code> respects the inherent output of the layer for which         the Jacobian matrices are calculated. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>jacobian_vec_tensor</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – Returned Jacobian tensor: matrix due to the vector structure of input and output</p></li>
+<li><p><strong>sm_I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – <code class="docutils literal notranslate"><span class="pre">smlayer</span></code> (<code class="docutils literal notranslate"><span class="pre">I</span></code>)</p></li>
+<li><p><strong>dict_component_jacobians</strong> (dict[<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>]) – Dictionary with the tensors <code class="docutils literal notranslate"><span class="pre">DA</span></code>, <code class="docutils literal notranslate"><span class="pre">DPhi</span></code> corresponding to inputs-outputs in <code class="docutils literal notranslate"><span class="pre">order</span></code>-major order,         and <code class="docutils literal notranslate"><span class="pre">jacobian_vec_tensor_multiplied_manually</span></code> (only if <em>b</em> is scalar)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.manual_jacobian_matrix_black_box_im_format">
+<span class="sig-name descname"><span class="pre">manual_jacobian_matrix_black_box_im_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.manual_jacobian_matrix_black_box_im_format" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the full Jacobian matrix (tensor) <span class="math notranslate nohighlight">\(\mathrm{D}F\)</span> for the function <code class="docutils literal notranslate"><span class="pre">F</span></code>, that is, <span class="math notranslate nohighlight">\(F(\mathrm{I})\)</span>,     transforming images into images, at the input image <code class="docutils literal notranslate"><span class="pre">I</span></code>. The provided <code class="docutils literal notranslate"><span class="pre">F</span></code> is treated purely as a black-box,     <em>i.e.</em> the Jacobian (matrix) of the operation is purely obtained through numerical methods and without any
+presumed knowledge about the inners of said mapping.      The procedure presumes that the provided ~collections.abc.Callable <code class="docutils literal notranslate"><span class="pre">F</span></code> allows for     for batch calculation, and that <code class="docutils literal notranslate"><span class="pre">I</span></code> is one single image with size <span class="math notranslate nohighlight">\((C_I, H_I, W_I)\)</span>.
+Partial derivatives are numerically calculated using the traditional 2-point estimator for the provided step <code class="docutils literal notranslate"><span class="pre">h</span></code>     as in
+<div class="math notranslate nohighlight">
+\[
+\frac{\mathrm{d}f}{\mathrm{d}x} \approx \frac{f(x+h)-f(x)}{h} \, .
+\]</div>
+</p>
+<p>The procedure, which keeps the image structure of input and output, produces an image of the same size     <span class="math notranslate nohighlight">\((C_O, H_O, W_O)\)</span> of <span class="math notranslate nohighlight">\(F(\mathrm{I})\)</span> for each and every channel-pixel of the entry, the image at each     channel-pixel meaning the (compensated infinitesimal change) caused in the complete output image by an     infinitesimal change of the corresponding channel-pixel of the input image. That is: the output of this function     is a tensor of size <span class="math notranslate nohighlight">\((C_I, H_I, W_I, C_O, H_O, W_O)\)</span>, wherein the 3D image at the position <span class="math notranslate nohighlight">\([ch, r, c]\)</span>     is the partial derivative of <span class="math notranslate nohighlight">\(F\)</span> with respect to the input element at <span class="math notranslate nohighlight">\([ch, r, c]\)</span>. In other words,
+<div class="math notranslate nohighlight">
+\[
+\mathrm{Output}[ch_I, r_I, c_I, ch_O, r_O, c_O] =
+\frac{\partial F_{[ch_O, r_O, c_O]}(\mathrm{I})}{\partial \mathrm{I}_{[ch_I, r_I, c_I]}} \, .
+\]</div>
+</p>
+<p><strong>Warning:</strong> <strong>PyTorch (e.g. with</strong> <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.Tensor.view.html#torch.Tensor.view" title="(in PyTorch v2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.Tensor.view()</span></code></a> <strong>)     unwraps tensors first row-wise, then column-wise, and finally channel-wise</strong>, and consequently the transform     of the output of this function to vectorized inputs/outputs might not be direct.     For a Jacobian formatted presuming vectorized (column-major or row-major) input and output images     see <a class="reference internal" href="#modified_rf.calculus.calculus.manual_jacobian_matrix_black_box_vec_format" title="modified_rf.calculus.calculus.manual_jacobian_matrix_black_box_vec_format"><code class="xref py py-func docutils literal notranslate"><span class="pre">manual_jacobian_matrix_black_box_vec_format()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>F</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><em>Callable</em></a>) – The (image-to-image) function whose Jacobian is calculated. <code class="docutils literal notranslate"><span class="pre">F</span></code> can indeed be a <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a>         object, since directly evaluating it using parenthesis would call its <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.forward" title="(in PyTorch v2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.nn.Module.forward()</span></code></a></p></li>
+<li><p><strong>I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Input image at which the Jacobian is calculated.</p></li>
+<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Step for the 2-point estimator of the partial derivative. Default: <code class="docutils literal notranslate"><span class="pre">1e-3</span></code></p></li>
+<li><p><strong>sparse_result</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Output as sparse tensor or not. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>jacobian_im_tensor</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – Returned Jacobian tensor (not matrix due to the tensor structure of input and output)</p></li>
+<li><p><strong>F_I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – F(I)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.manual_jacobian_matrix_black_box_vec_format">
+<span class="sig-name descname"><span class="pre">manual_jacobian_matrix_black_box_vec_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.manual_jacobian_matrix_black_box_vec_format" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the full Jacobian matrix (tensor) <span class="math notranslate nohighlight">\(\mathrm{D}F\)</span> for the function <code class="docutils literal notranslate"><span class="pre">F</span></code>, that is, <span class="math notranslate nohighlight">\(F(\mathrm{I})\)</span>,     transforming images into images, at the input image <code class="docutils literal notranslate"><span class="pre">I</span></code>, <strong>wherein the resulting Jacobian tensor is formatted
+as a 2D matrix corresponding to the input and output images vectorized as column-major order     (or, respectively, row-major order) even thought</strong> <code class="docutils literal notranslate"><span class="pre">F</span></code> <strong>and</strong> <code class="docutils literal notranslate"><span class="pre">I</span></code>     <strong>work with/are image (not vectorized) format</strong>.</p>
+<p>This function is based directly on <a class="reference internal" href="#modified_rf.calculus.calculus.manual_jacobian_matrix_black_box_im_format" title="modified_rf.calculus.calculus.manual_jacobian_matrix_black_box_im_format"><code class="xref py py-func docutils literal notranslate"><span class="pre">manual_jacobian_matrix_black_box_im_format()</span></code></a>     (it is advisable to read its corresponding documentation for additional information) and simply     reorders its returned elements according to the selected vectorized image order <code class="docutils literal notranslate"><span class="pre">order</span></code>. The order <code class="docutils literal notranslate"><span class="pre">'col'</span></code>,     considered as default, traces column-wise each image channel; the order <code class="docutils literal notranslate"><span class="pre">'row'</span></code>, instead, row-wise     (see <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Row-_and_column-major_order&amp;oldid=1226393111">Wiki</a>).</p>
+<p><strong>Warning:</strong> <strong>PyTorch appears to work naturally using raw-major order: this might have an impact     on the performance of this function if used in column-major order and depending on the application!</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>F</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><em>Callable</em></a>) – The (image-to-image) function whose Jacobian is calculated. <code class="docutils literal notranslate"><span class="pre">F</span></code> can indeed be a <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a>         object, since directly evaluating it using parenthesis would call its <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.forward" title="(in PyTorch v2.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.nn.Module.forward()</span></code></a></p></li>
+<li><p><strong>I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – Input image at which the Jacobian is calculated.</p></li>
+<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Step for the 2-point estimator of the partial derivative. Default: <code class="docutils literal notranslate"><span class="pre">1e-3</span></code></p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Value among  <code class="docutils literal notranslate"><span class="pre">‘col’</span></code> and <code class="docutils literal notranslate"><span class="pre">‘row’</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">‘col’</span></code></p></li>
+<li><p><strong>sparse_result</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Output as sparse tensor or not. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>jacobian_vec_tensor</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – Returned Jacobian tensor: matrix due to the vector structure of input and output</p></li>
+<li><p><strong>F_I</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – F(I)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.real_value_decomposition_im_format">
+<span class="sig-name descname"><span class="pre">real_value_decomposition_im_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_im_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_im_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">computation_device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.real_value_decomposition_im_format" title="Link to this definition">¶</a></dt>
+<dd><p>Decomposition of the linear transform between images expressed by the 2D matrix/tensor <code class="docutils literal notranslate"><span class="pre">X</span></code>. It is assumed     2D since it is assumed that the underlying images are represented in vector (col- or row-major order)     representations.
+This version of the function, named <em>_im_format</em>, returns the eigenvalues of the transform in image format:     it uses internally the function <a class="reference internal" href="#modified_rf.calculus.calculus.real_value_decomposition_vec_format" title="modified_rf.calculus.calculus.real_value_decomposition_vec_format"><code class="xref py py-func docutils literal notranslate"><span class="pre">real_value_decomposition_vec_format()</span></code></a> (see its documentation for further     details) and transforms the result into vector format, according to the provided     <code class="docutils literal notranslate"><span class="pre">order</span></code>-major order, using <a class="reference internal" href="#modified_rf.calculus.calculus.vec2im_format" title="modified_rf.calculus.calculus.vec2im_format"><code class="xref py py-func docutils literal notranslate"><span class="pre">vec2im_format()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – 2D tensor corresponding to a linear transform between images (e.g. the Jacobian matrix of         a given image transform) for either col-major or row-major order representations         of underlying images</p></li>
+<li><p><strong>input_im_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>] or </em><a class="reference external" href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="(in PyTorch v2.9)"><em>torch.Size</em></a>) – Size <span class="math notranslate nohighlight">\((\mathrm{C}, \mathrm{H}, \mathrm{W})\)</span> of the input images of the linear transform in image format</p></li>
+<li><p><strong>output_im_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>] or </em><a class="reference external" href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="(in PyTorch v2.9)"><em>torch.Size</em></a><em>, </em><em>optional</em>) – Size <span class="math notranslate nohighlight">\((\mathrm{C}, \mathrm{H}, \mathrm{W})\)</span> of the output images of the linear transform in image format.         If no value (or if <code class="docutils literal notranslate"><span class="pre">None</span></code>) is provided the same size provided for the input is presumed.         Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Value among  <code class="docutils literal notranslate"><span class="pre">‘col’</span></code> and <code class="docutils literal notranslate"><span class="pre">‘row’</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">‘col’</span></code></p></li>
+<li><p><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for the symmetry assessment (see <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.allclose.html#torch.allclose" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.allclose()</span></code></a>). Default: <code class="docutils literal notranslate"><span class="pre">1e-08</span></code></p></li>
+<li><p><strong>rtol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Relative tolerance for the symmetry assessment (see <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.allclose.html#torch.allclose" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.allclose()</span></code></a>). Default: <code class="docutils literal notranslate"><span class="pre">1e-05</span></code></p></li>
+<li><p><strong>computation_device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Value among <code class="docutils literal notranslate"><span class="pre">'cuda'</span></code> and <code class="docutils literal notranslate"><span class="pre">'cpu'</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">cuda</span></code> (if available)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>U_im</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – Left basis for the decomposition, in im format: that is, a 4D tensor <span class="math notranslate nohighlight">\((N_U, C, H_U, W_U)\)</span></p></li>
+<li><p><strong>S</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – 1D corresponding to either the eigenvalues or the singular values</p></li>
+<li><p><strong>V_im</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – Right basis for the decomposition, in vector format: that is, a 4D tensor <span class="math notranslate nohighlight">\((N_V, C, H_V, W_V)\)</span></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.real_value_decomposition_vec_format">
+<span class="sig-name descname"><span class="pre">real_value_decomposition_vec_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">computation_device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.real_value_decomposition_vec_format" title="Link to this definition">¶</a></dt>
+<dd><p>Decomposition of the linear transform between images expressed by the 2D matrix/tensor <code class="docutils literal notranslate"><span class="pre">X</span></code>. It is assumed     2D since it is assumed that the underlying images are represented in vector (col- or row-major order)     representations.
+This version of the function, named <em>_vec_format</em>, returns the eigenvalues of the transform in (the same)     vector format (of the given transform).
+The type of the transform used will differ depending on the characteristics     of the transform so the results provided are given in real numbers:</p>
+<ul class="simple">
+<li><p>Eigenvalue decomposition only applies to square matrices (that is, same size for input and output). Additionally,      the eigenvalue decomposition is real for real symmetric matrices. Thus, an initial check is performed in the
+function, and when <code class="docutils literal notranslate"><span class="pre">X</span></code> is (square and) <em>approximately</em> symmetric then the function <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.linalg.eigh.html#torch.linalg.eigh" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.linalg.eigh()</span></code></a>      is used. The check is performed using the function <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.allclose.html#torch.allclose" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.allclose()</span></code></a>, which uses the       arguments <code class="docutils literal notranslate"><span class="pre">atol</span></code> and <code class="docutils literal notranslate"><span class="pre">rtol</span></code> and which in turn justifies the inclusion of them as arguments of the       present function.</p></li>
+<li><p>Singular value decomposition (SVD) applies to general matrices, and allows for a non-negative real-value diagonal      decomposition based on two real rotation-reflection matrices, respectively, in the input and output spaces
+(<a class="reference external" href="https://en.wikipedia.org/wiki/Singular_value_decomposition">SVD in Wikipedia</a>). The decomposition is calculated using       the function <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.linalg.svd.html#torch.linalg.svd" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.linalg.svd()</span></code></a>.</p></li>
+</ul>
+<p>Both cases will return the same triplet with identical format: (<code class="docutils literal notranslate"><span class="pre">U</span></code>, <code class="docutils literal notranslate"><span class="pre">S</span></code>, and <code class="docutils literal notranslate"><span class="pre">V</span></code>), wherein     <span class="math notranslate nohighlight">\(\mathrm{X} = \mathrm{U} \mathrm{S} \mathrm{V}^T\)</span>, wherein <span class="math notranslate nohighlight">\(\mathrm{U}\)</span> and <span class="math notranslate nohighlight">\(\mathrm{V}\)</span> are     orthogonal and <span class="math notranslate nohighlight">\(\mathrm{S}\)</span> is a 1D vector/tensor with the eigenvalues/singular values in     decreasing order of magnitude/abs.     The differences between both decompositions reside in that     <em>(i)</em> for the eigenvalue decomposition, <span class="math notranslate nohighlight">\(\mathrm{U} = \mathrm{V}\)</span> and the length of     <span class="math notranslate nohighlight">\(\mathrm{S}\)</span> is the same as the side each of them, whereas for SVD they are not, and     <em>(ii)</em> when eigenvalue decomposition is used the eigenvalues might not be positive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>) – 2D tensor corresponding to a linear transform between images (e.g. the Jacobian matrix of         a given image transform) for either col-major or row-major order representations         of underlying images</p></li>
+<li><p><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for the symmetry assessment (see <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.allclose.html#torch.allclose" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.allclose()</span></code></a>). Default: <code class="docutils literal notranslate"><span class="pre">1e-08</span></code></p></li>
+<li><p><strong>rtol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Relative tolerance for the symmetry assessment (see <a class="reference external" href="https://docs.pytorch.org/docs/stable/generated/torch.allclose.html#torch.allclose" title="(in PyTorch v2.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.allclose()</span></code></a>). Default: <code class="docutils literal notranslate"><span class="pre">1e-05</span></code></p></li>
+<li><p><strong>computation_device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Value among <code class="docutils literal notranslate"><span class="pre">'cuda'</span></code> and <code class="docutils literal notranslate"><span class="pre">'cpu'</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">cuda</span></code> (if available)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>U_vec</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – Left basis for the decomposition, in vector format: that is, 2D tensor</p></li>
+<li><p><strong>S</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – 1D corresponding to either the eigenvalues or the singular values</p></li>
+<li><p><strong>V_vec</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>) – Right basis for the decomposition, in vector format: that is, 2D tensor</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.calculus.calculus.vec2im_format">
+<span class="sig-name descname"><span class="pre">vec2im_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">I_in_vec_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I_in_im_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.calculus.calculus.vec2im_format" title="Link to this definition">¶</a></dt>
+<dd><p>Formatting the tensor <code class="docutils literal notranslate"><span class="pre">I_in_vec_format</span></code>, an image in vector format (that is, wherein a column represents     a flattened image) of 1D or 2D if it corresponds to B images as an image, or B images, of the size provided
+with <code class="docutils literal notranslate"><span class="pre">I_in_im_size</span></code>: the latter is a 3D tuple/size indicating <span class="math notranslate nohighlight">\((\mathrm{C}, \mathrm{H}, \mathrm{W})\)</span>.     The transform will correspond to the provided <code class="docutils literal notranslate"><span class="pre">order</span></code>-major order presumed for the     vector representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>I_in_vec_format</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>)</p></li>
+<li><p><strong>I_in_im_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>] or </em><a class="reference external" href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="(in PyTorch v2.9)"><em>torch.Size</em></a>) – Size <span class="math notranslate nohighlight">\((\mathrm{C}, \mathrm{H}, \mathrm{W})\)</span> of the images in image format</p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Value among  <code class="docutils literal notranslate"><span class="pre">‘col’</span></code> and <code class="docutils literal notranslate"><span class="pre">‘row’</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">‘col’</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>I_in_im_format</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)">torch.Tensor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-modified_rf.calculus">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-modified_rf.calculus" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="modified_rf.html">modified_rf package</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="modified_rf.fixed_point.html">modified_rf.fixed_point package</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Raul Mohedano.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

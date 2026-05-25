@@ -1,0 +1,27 @@
+--extra-index-url https://download.pytorch.org/whl/cu128
+
+# PyTorch (CUDA 12.8)
+torch==2.7.0
+torchvision
+torchaudio
+
+# Utilidades y visualización
+boto3
+mlflow==2.18.0
+ipykernel
+ipython
+matplotlib
+nvidia-ml-py
+python-dotenv
+seaborn
+scipy
+scikit-learn
+scikit-image
+sphinx
+toml
+tomli
+tqdm
+
+# Librerías adicionales para PyTorch
+torchdeq==0.1.0
+torchattacks==3.3.0

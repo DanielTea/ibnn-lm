@@ -1,0 +1,34 @@
+# demo_sm_vs_ibnn_lite_group.toml
+
+experiment_name = "demo_sm_vs_ibnn_lite_same_arch"
+purpose = "Same architecture and dataset with SM vs IBNN_lite."
+base_experiment_specification_file = "./common_configuration_parameters.toml"
+
+mlflow_logging = false
+local_log_folder = false
+
+[dataset]
+#  name = ["svhn"]
+
+[classifier]
+  conv_like_type = ["ibnn"]
+  conv_like_type_position = ["everywhere"]
+
+  [classifier.conv_like_layer]
+    [classifier.conv_like_layer.nonlinear_bias]
+      [classifier.conv_like_layer.nonlinear_bias.cross_conv_computation]
+
+  [classifier.architecture_specific]
+    [classifier.architecture_specific.multi_layer]
+      num_conv_like_layers = [2]
+      channels_per_conv_layer = [[3, 3]]
+
+[training]
+  maximum_epochs = [10]
+  epochs_sm_based_warmup = [2]
+
+  [training.optimizer]
+
+  [training.scheduler]
+
+  [training.adversarial]

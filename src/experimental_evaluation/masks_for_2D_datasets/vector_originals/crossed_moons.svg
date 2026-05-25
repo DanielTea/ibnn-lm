@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="100mm"
+   height="100mm"
+   viewBox="0 0 100 100"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (1:1.4.2+202505120738+ebf0e940d0)"
+   sodipodi:docname="crossed_moons.svg"
+   inkscape:export-filename="crossed_moons.jpg"
+   inkscape:export-xdpi="127"
+   inkscape:export-ydpi="127"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="2.1367164"
+     inkscape:cx="227.4518"
+     inkscape:cy="199.83934"
+     inkscape:window-width="1850"
+     inkscape:window-height="1016"
+     inkscape:window-x="70"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect1"
+       is_visible="true"
+       lpeversion="1" />
+  </defs>
+  <g
+     inkscape:label="background"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-31.871462,-24.516508)">
+    <rect
+       style="fill:#ffffff;stroke-width:1.5;fill-opacity:1"
+       id="rect1"
+       width="100"
+       height="100"
+       x="31.871462"
+       y="24.516508"
+       inkscape:label="white_background" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="foreground"
+     inkscape:highlight-color="#e381df">
+    <g
+       id="g1"
+       transform="translate(2.4410785,3.1012796)">
+      <path
+         id="path1"
+         style="fill:#808080;fill-opacity:1;stroke-width:1.49999"
+         d="m 60.498529,50.538373 c 0,9.636071 -2.031134,14.720384 -2.031134,14.720384 0,0 -3.047039,-25.846279 -8.871773,-36.21354 -2.294813,-4.084466 -10.048431,-8.45069 -13.263366,-8.282013 -3.016863,0.158285 -10.362358,4.518747 -12.464611,8.443791 -5.701843,10.645712 -9.111207,36.051762 -9.111207,36.051762 0,0 -2.590455,-4.458672 -2.590455,-14.720384 0,-8.070796 1.240016,-15.624262 3.398303,-22.085692 1.791901,-5.364553 4.216768,-9.97636 7.09047,-13.506527 3.889211,-4.777656 8.600525,-7.5741377 13.6775,-7.5741377 13.346664,0 24.166273,19.3262357 24.166273,43.1663567 z"
+         sodipodi:nodetypes="scssscsssss"
+         inkscape:label="class_0" />
+      <path
+         id="path1-3"
+         style="stroke-width:1.49999"
+         d="m 82.95186,43.259067 c 0,-9.636071 -2.031134,-14.720384 -2.031134,-14.720384 0,0 -3.047039,25.846279 -8.871773,36.21354 -2.294813,4.084466 -10.048431,8.45069 -13.263366,8.282013 C 55.768724,72.875951 48.423229,68.515489 46.320976,64.590445 40.619133,53.944733 37.209769,28.538683 37.209769,28.538683 c 0,0 -2.590455,4.458672 -2.590455,14.720384 0,8.070796 1.240016,15.624262 3.398303,22.085692 1.791901,5.364553 4.216768,9.97636 7.09047,13.506527 3.889211,4.777656 8.600525,7.574138 13.6775,7.574138 13.346664,0 24.166273,-19.326236 24.166273,-43.166357 z"
+         sodipodi:nodetypes="scssscsssss"
+         inkscape:label="class_1" />
+    </g>
+  </g>
+</svg>

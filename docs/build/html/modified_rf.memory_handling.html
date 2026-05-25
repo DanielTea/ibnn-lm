@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>modified_rf.memory_handling package &#8212; project-rf-comparison 0.5 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=dfa0e015" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+    <script src="_static/documentation_options.js?v=db78e746"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="modified_rf.nn_layers package" href="modified_rf.nn_layers.html" />
+    <link rel="prev" title="modified_rf.fixed_point package" href="modified_rf.fixed_point.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>project-rf-comparison 0.5 documentation</span></a></h1>
+        <h2 class="heading"><span>modified_rf.memory_handling package</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="modified_rf.fixed_point.html">modified_rf.fixed_point package</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="modified_rf.nn_layers.html">modified_rf.nn_layers package</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="modified-rf-memory-handling-package">
+<h1>modified_rf.memory_handling package<a class="headerlink" href="#modified-rf-memory-handling-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-modified_rf.memory_handling.memory_handling">
+<span id="modified-rf-memory-handling-memory-handling-module"></span><h2>modified_rf.memory_handling.memory_handling module<a class="headerlink" href="#module-modified_rf.memory_handling.memory_handling" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.memory_handling.memory_handling.desired_tensor_memory_size">
+<span class="sig-name descname"><span class="pre">desired_tensor_memory_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_tensor_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">torch_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'B'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.memory_handling.memory_handling.desired_tensor_memory_size" title="Link to this definition">¶</a></dt>
+<dd><p>It returns the memory space that a potential tensor of size <code class="docutils literal notranslate"><span class="pre">query_tensor_size</span></code> and torch.dtype <code class="docutils literal notranslate"><span class="pre">torch_dtype</span></code>,     dense, would require. If no <code class="docutils literal notranslate"><span class="pre">torch_dtype</span></code> is provided the current <code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.get_default_dtype()</span></code> is presumed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_tensor_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>] or </em><a class="reference external" href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="(in PyTorch v2.9)"><em>torch.Size</em></a>)</p></li>
+<li><p><strong>torch_dtype</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.9)"><em>torch.dtype</em></a>)</p></li>
+<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Value among <code class="docutils literal notranslate"><span class="pre">'B'</span></code>, <code class="docutils literal notranslate"><span class="pre">'KB'</span></code>, <code class="docutils literal notranslate"><span class="pre">'MB'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'GB'</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">'MB'</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.memory_handling.memory_handling.fraction_desired_tensor_fitting_available_memory">
+<span class="sig-name descname"><span class="pre">fraction_desired_tensor_fitting_available_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_tensor_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">torch_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">computation_device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.memory_handling.memory_handling.fraction_desired_tensor_fitting_available_memory" title="Link to this definition">¶</a></dt>
+<dd><p>It returns the ratio between the memory that the desired tensor would occupy, calculated internally using the     function <a class="reference internal" href="#modified_rf.memory_handling.memory_handling.desired_tensor_memory_size" title="modified_rf.memory_handling.memory_handling.desired_tensor_memory_size"><code class="xref py py-func docutils literal notranslate"><span class="pre">desired_tensor_memory_size()</span></code></a>, and the available memory in the indicated computation device.     The returned ratio provides a guidance about the need for resizing or reducing the type resolution of the desired     tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_tensor_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>] or </em><a class="reference external" href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="(in PyTorch v2.9)"><em>torch.Size</em></a>)</p></li>
+<li><p><strong>torch_dtype</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.9)"><em>torch.dtype</em></a>)</p></li>
+<li><p><strong>computation_device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Default: <code class="docutils literal notranslate"><span class="pre">'cuda'</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.memory_handling.memory_handling.print_memory_progress">
+<span class="sig-name descname"><span class="pre">print_memory_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MB'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.memory_handling.memory_handling.print_memory_progress" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>computation_device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Value among <code class="docutils literal notranslate"><span class="pre">'B'</span></code>, <code class="docutils literal notranslate"><span class="pre">'KB'</span></code>, <code class="docutils literal notranslate"><span class="pre">'MB'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'GB'</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">'MB'</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.memory_handling.memory_handling.print_tensor_memory_size">
+<span class="sig-name descname"><span class="pre">print_tensor_memory_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MB'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.memory_handling.memory_handling.print_tensor_memory_size" title="Link to this definition">¶</a></dt>
+<dd><p>Estimated tensor size… if dense: if <code class="docutils literal notranslate"><span class="pre">query_tensor</span></code> is sparse the result would indicate the memory that the     tensor, with its defined data type and size, would occupy as dense.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_tensor</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>)</p></li>
+<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Value among <code class="docutils literal notranslate"><span class="pre">'B'</span></code>, <code class="docutils literal notranslate"><span class="pre">'KB'</span></code>, <code class="docutils literal notranslate"><span class="pre">'MB'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'GB'</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">'MB'</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modified_rf.memory_handling.memory_handling.tensor_memory_size">
+<span class="sig-name descname"><span class="pre">tensor_memory_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'B'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modified_rf.memory_handling.memory_handling.tensor_memory_size" title="Link to this definition">¶</a></dt>
+<dd><p>Estimated tensor size. It provides three values: <em>(1)</em> real (approximated) memory occupancy; <em>(2)</em> type of the     tensor <code class="docutils literal notranslate"><span class="pre">is_sparse</span></code>: ‘dense’ (<code class="docutils literal notranslate"><span class="pre">False</span></code>) or ‘sparse’ (<code class="docutils literal notranslate"><span class="pre">True</span></code>); <em>(3)</em> (approximated) memory occupancy if dense.     Both memory values provided are in <code class="docutils literal notranslate"><span class="pre">'units'</span></code>.</p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">query_tensor</span></code> is dense: (1) and (3) are coincident.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">query_tensor</span></code> is sparse, two results: (1) approximate memory that its composing structures actually occupy.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_tensor</strong> (<a class="reference external" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.9)"><em>torch.Tensor</em></a>)</p></li>
+<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Value among <code class="docutils literal notranslate"><span class="pre">'B'</span></code>, <code class="docutils literal notranslate"><span class="pre">'KB'</span></code>, <code class="docutils literal notranslate"><span class="pre">'MB'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'GB'</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">'MB'</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>memory_occupancy_in_units</strong> (<em>float</em>)</p></li>
+<li><p><strong>is_sparse</strong> (<em>bool</em>)</p></li>
+<li><p><strong>memory_occupancy_if_dense_in_units</strong> (<em>float</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-modified_rf.memory_handling">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-modified_rf.memory_handling" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="modified_rf.fixed_point.html">modified_rf.fixed_point package</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="modified_rf.nn_layers.html">modified_rf.nn_layers package</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Raul Mohedano.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

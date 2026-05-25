@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>main_train_classifiers module &#8212; project-rf-comparison 0.5 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=dfa0e015" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+    <script src="_static/documentation_options.js?v=db78e746"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="marcelos_experiment_functions module" href="marcelos_experiment_functions.html" />
+    <link rel="prev" title="main_retrain_classifiers module" href="main_retrain_classifiers.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>project-rf-comparison 0.5 documentation</span></a></h1>
+        <h2 class="heading"><span>main_train_classifiers module</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="main_retrain_classifiers.html">main_retrain_classifiers module</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="marcelos_experiment_functions.html">marcelos_experiment_functions module</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="module-main_train_classifiers">
+<span id="main-train-classifiers-module"></span><h1>main_train_classifiers module<a class="headerlink" href="#module-main_train_classifiers" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="main_train_classifiers.deactivate_irrelevant_parameters_classifier_training_experiment">
+<span class="sig-name descname"><span class="pre">deactivate_irrelevant_parameters_classifier_training_experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_dict_individual_experiment_specification</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main_train_classifiers.deactivate_irrelevant_parameters_classifier_training_experiment" title="Link to this definition">¶</a></dt>
+<dd><p>This function takes a dictionary <cite>dict_individual_experiment_specification</cite> containing the specification of an     individual training experiment and deactivates the parameters which are not relevant for the specific experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>raw_dict_individual_experiment_specification</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – The dictionary containing the specification of an individual training experiment, before deactivation</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>processed_dict_individual_experiment_specification</strong> – The same dictionary, with the irrelevant parameters deactivated</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main_train_classifiers.run_classifier_training_experiment">
+<span class="sig-name descname"><span class="pre">run_classifier_training_experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_individual_experiment_specification</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_general_info_group_experiment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'medium'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main_train_classifiers.run_classifier_training_experiment" title="Link to this definition">¶</a></dt>
+<dd><p>Function controlling the training of a classifier from a dictionary, given in the     <cite>dict_experiment_specification</cite> argument, which contains the specification of the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dict_individual_experiment_specification</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>)</p></li>
+<li><p><strong>dict_general_info_group_experiment</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>, </em><em>optional</em>) – Dictionary containing the general information of the group experiment, namely <cite>‘experiment_name’</cite> (str),         <cite>‘purpose’</cite> (str), <cite>‘base_experiment_specification_file’</cite> (str, a path to a file),         <cite>‘mlflow_logging’</cite> (bool), and <cite>‘local_log_folder’</cite> (str a path to a folder or <cite>None</cite> if not provided).
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code>, which would result in an unnamed experiment with no logging</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Default: <code class="docutils literal notranslate"><span class="pre">'medium'</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>result_classifier_training</strong> (named tuple returned by <a class="reference internal" href="experimental_evaluation.html#experimental_evaluation.experiment_utils.classifier_training" title="experimental_evaluation.experiment_utils.classifier_training"><code class="xref py py-func docutils literal notranslate"><span class="pre">classifier_training()</span></code></a>)</p></li>
+<li><p><strong>dataset_loader_dict</strong> (<a class="reference internal" href="experimental_evaluation.html#experimental_evaluation.operations_for_datasets.LoadedDatasetDict" title="experimental_evaluation.operations_for_datasets.LoadedDatasetDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoadedDatasetDict</span></code></a>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main_train_classifiers.run_classifier_training_experiment_group_from_toml_file">
+<span class="sig-name descname"><span class="pre">run_classifier_training_experiment_group_from_toml_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment_group_specification_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mlflow_logging</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vmg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'medium'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main_train_classifiers.run_classifier_training_experiment_group_from_toml_file" title="Link to this definition">¶</a></dt>
+<dd><p>Instance of the function <code class="xref py py-func docutils literal notranslate"><span class="pre">experimental_evaluation.run_experiment_group_from_toml_file()</span></code> for     running a group of classifier training experiments. The function     <code class="xref py py-func docutils literal notranslate"><span class="pre">experimental_evaluation.run_experiment_group_from_toml_file()</span></code> is called with the following     composing functions:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#main_train_classifiers.run_classifier_training_experiment" title="main_train_classifiers.run_classifier_training_experiment"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_classifier_training_experiment()</span></code></a> as <cite>function_run_individual_experiment_from_dict</cite></p></li>
+<li><p><a class="reference internal" href="#main_train_classifiers.deactivate_irrelevant_parameters_classifier_training_experiment" title="main_train_classifiers.deactivate_irrelevant_parameters_classifier_training_experiment"><code class="xref py py-func docutils literal notranslate"><span class="pre">deactivate_irrelevant_parameters_classifier_training_experiment()</span></code></a> as         <cite>function_deactivate_irrelevant_parameters_in_dict</cite></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment_group_specification_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to the TOML file containing the group experiment specification</p></li>
+<li><p><strong>mlflow_logging</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – URL of the MLflow tracking server to be used for logging.
+Default: <code class="docutils literal notranslate"><span class="pre">&quot;vmg&quot;</span></code>, which loads the system credentials and addresses</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Default: <code class="docutils literal notranslate"><span class="pre">'medium'</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="main_retrain_classifiers.html">main_retrain_classifiers module</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="marcelos_experiment_functions.html">marcelos_experiment_functions module</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, Raul Mohedano.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>
