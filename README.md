@@ -1,126 +1,74 @@
-# IBNN
+# ibnn-lm
 
-## Aim
-This project contains the implementation of the Implicit Bias Neural Networks (IBNN) presented in [[1]](#ibnn-reference).
-More specifically, it contains the implementation of layers, based on PyTorch, according to the IBNN paradigm,
-and provides utilites for training them and for comparing them to analogous
-traditional convolutional layers (based on the Standard Model, SM, of deep learning, based on artificial neurons
-according to the point-neuron model) in image classification tasks.
+A transformer/language-model fork of the **Implicit Bias Neural Network (IBNN)** neuron from
+Mohedano, Batard, Velasco-Salido, De Los Santos Mendoza, Martínez, Levine & Bertalmío,
+*Updating the standard neuron model in artificial neural networks* (arXiv, 2026),
+upstream code at `github.com/vmg-io-csic/ibnn`.
 
-The IBNN layers, as detailed in [[1]](#ibnn-reference), are composed of a number of $D$ neurons, wherein
-each neuron $i$ produces a response $v_i$ to the input $(x_{j})_{j=1}^{N}$ of the layer according to   
+The upstream implementation targets 2D image convolutions, with the IBNN lateral interaction
+realized as a spatial cross-difference convolution. That stack is too image-specific to drop
+into a transformer, so this fork re-implements the **essential neuron math** as a
+fully-connected layer and wires it into a nanoGPT-style decoder. The authors themselves list
+"a Transformer using the updated neuron model" as open future work, so treat this as a
+research starting point, not a validated recipe.
 
-$$
-    \begin{split}
-        \displaystyle v_i &= \phi(z_i) \\
-        \displaystyle z_i &=
-            \displaystyle \sum_{j=1}^N m_{ij} x_j - b_i
-            - \lambda \sum_{k=1}^D w_{ik}  \sigma \left( z_k  -  z_i\right) ,
-    \end{split}
-$$
+## The neuron
 
-which corresponds to system of coupled implicit equations and a multidimensional fixed-point problem:
-the present implementation relies on the library [TorchDEQ](#torchdeq-reference) for the aspects regarding
-implicit operations. Further details can be found in [[1]](#ibnn-reference).
+Standard transformer FFN hidden unit (the "Standard Model", SM):
 
-## Structure
-In particular, the IBNN layer is implemented by two specific
-classes/PyTorch [modules](https://docs.pytorch.org/docs/2.12/generated/torch.nn.Module.html)
-that correspond to the same formulation but carry it out with different degree of precision:
-- ``IBNNLayer``, which corresponds to the full-version layer performing a detailed calculation of the
-  fixed-point solution of the system of coupled implicit equations describing IBNN; and
-- ``IBNNLiteLayer``, which is a lighter version of the above ``IBNNLayer`` performing one single
-  iteration of the fixed-point search and thus implemented as a purely forward, instead of implicit, layer.
+    u_i = phi( (W x)_i - b_i )
 
-The code of the project (in the folder ``src``) has the following is based on the created packages, subpackages,
-and modules:
-- ``modified_rf``, containing the code related to the creation, use, and analysis of the ANN layers
-  of this project, and containing the following subpackages:
-  - ``nn_layers``, which contains the
-    PyTorch classes/[modules](https://docs.pytorch.org/docs/2.12/generated/torch.nn.Module.html) corresponding
-    to ANN layers (including the class ``SMLayer``, which corresponds, in its convolutional version,
-    to the module [Conv2D](https://docs.pytorch.org/docs/2.12/generated/torch.nn.Conv2d.html) of PyTorch, and ``IBNNLayer`` and its light version ``IBNNLiteLayer``),
-  - ``fixed_point``,
-  - ``calculus``,
-  - ``memory_handling``,
-- ``applications``, containing the code related to the creation complete functional networks, using (among other blocks)
-    the layers from the ``modified_rf`` package, and containing for now the following subpackage:
-  - ``classifiers``,
-- ``experimental_evaluation``, containing the code related to the evaluation of the implemented layers and networks
-    on the core computer vision tasks, and containing for now the following modules:
-  - ``experiment_utils.py``, containing the functions for the training, evaluation, logging, and log analysis
-    of the implemented layers and networks, and
-  - ``adversarial_attacks.py``.
+IBNN hidden unit (this fork):
 
-Help and documentation for the existing code can be found in [docs/build/html/index.html](docs/build/html/index.html).
+    z_i = (W x)_i - b_i  -  lambda * (1/D) * sum_k tanh( p * (z_k - z_i) )
+    v_i = phi( z_i )
 
-## Setup/install
+Key choices, following the paper:
+- The lateral coupling runs over the **hidden channels** of the FFN, applied **independently
+  per token position**. This is automatically causal (no masking needed) and parallel across
+  the sequence. Coupling across the token axis would re-invent attention and break causality.
+- `w_ik` is uniform (`1/D`), so the new term adds **no weight parameters**. `lambda` is a
+  single scalar per layer, optionally trainable (recommended). Verified empirically: an IBNN
+  model has exactly `+n_layer` parameters vs its SM twin.
+- `z` is implicit. We solve by a damped fixed-point iteration started from the SM
+  pre-activation. `num_iters=1` is the cheap **"lite"** layer (purely forward, no solver);
+  `num_iters>1` unrolls the solve and is differentiated directly by autograd.
 
-1. Clone the repo in your local:<br> `git clone https://github.com/vmg-io-csic/ibnn.git`
+## Files
 
-In the repo folder ``ibnn``:
+    ibnn_lm/layers.py      IBNNLinear (the neuron) and IBNNMLP (the FFN block)
+    ibnn_lm/model.py       nanoGPT-style GPT; pick ffn="ibnn" or ffn="sm"; SM->IBNN warm-start
+    ibnn_lm/train_demo.py  char-level training demo (synthetic corpus by default)
 
-2. OPTIONAL BUT ADVISABLE: create an environment for the dependencies using one of two options:
-    * Using `virtualenv`:
-      - Create a `virtualenv`:<br> `virtualenv -p python3.10 ibnn-env`
-      - Activate the virtualenv:<br> `source ibnn-env/bin/activate`
-    * Using Conda:
-      - Create a Conda environment:<br> `conda create -n ibnn-env python=3.10`
-      - Activate the Conda environment:<br> `conda activate ibnn-env`
-3. Install dependencies:<br> `pip install -r requirements.txt`
+## Quick start
 
-Once the dependencies are satisfied, the implemented layers are ready to be used. 
+    pip install -r requirements.txt
+    # head-to-head at equal parameter count:
+    python -m ibnn_lm.train_demo --ffn sm   --steps 300
+    python -m ibnn_lm.train_demo --ffn ibnn --num_iters 1 --steps 300
+    # data-efficiency probe (the paper's headline claim): shrink the training set
+    python -m ibnn_lm.train_demo --ffn ibnn --train_frac 0.3 --steps 300
 
-## Run: training and validation
+Both modes train; on the toy corpus the IBNN-lite LM drops from perplexity ~1e18 to single
+digits within a few dozen steps.
 
-In addition to the implemented layers (and their supporting methods and classes),
-the repository contains utilities embodying the architectures and training processes
-used to generate the results in [[1]](#ibnn-reference).
-In particular, (``/src/``)``main_train_classifiers.py`` allows the creation, training, and validation of image classification experiments for, among others, the datasets
-MNIST, FashionMNISTS, SVHN, and CIFAR-10. This script accepts configuration files whose formats can be checked,
-detailed, in the file [CLASSIFIER_TRAINING_CONFIG_FILE_FORMAT.md](CLASSIFIER_TRAINING_CONFIG_FILE_FORMAT.md).
+## Known limitations (read before scaling)
 
-### Demo
-
-An illustrative example of the use of the above training utility, which illustrates
-how to compare analogous architectures based on different types of hidden layers and
-which uses one of the implemented IBNN layers, can be executed using the line
-
-```
-python ./src/main_train_classifiers.py ./experiment_configuration_files/demo_sm_vs_ibnn_lite.toml
-```
-
-The above demo takes few minutes and addresses the same architecture executed, in the first run, based on usual convolutional hidden layers
-(i.e. according to the SM) and, in the second run, based on the lightweight version ``IBNNLiteLayer``
-of the proposed artificial neuron model IBNN.
-
-For the analogous example using the complete ``IBNNLayer`` with higher precision calculation of the
-fixed-point solutions using multiple iterations (and lasting longer than the above), use the configuration file
-``./experiment_configuration_files/demo_ibnn.toml`` instead.
+1. **O(D^2) lateral term.** `tanh(z_k - z_i)` over all hidden-unit pairs builds a
+   `(B, T, D_ff, D_ff)` tensor. At `d_model=128` / `d_ff=512` with a modest batch this is
+   already ~2 GB and will OOM a small box. Keep `d_ff` small, or replace the mean-field term
+   with a cheaper approximation, before going wide. This is the main thing standing between
+   the toy demo and a real run.
+2. **No evidence it scales.** The paper validated CNNs on Fashion-MNIST/SVHN/CIFAR-10. Whether
+   the data-efficiency / robustness / anti-memorization gains carry to autoregressive LMs is
+   an open empirical question this repo is meant to help answer.
+3. **Implicit solve cost.** `num_iters>1` multiplies FFN forward cost by the iteration count.
+   The unrolled autograd here is simple but memory-hungry; for real training, swap in proper
+   implicit differentiation (IFT) or TorchDEQ behind the same `IBNNLinear` interface.
+4. **Stability.** The paper warm-starts IBNN nets from a trained SM surrogate. The analog here
+   is `copy_sm_weights_into_ibnn`: train `ffn="sm"`, transfer, then switch lambda on. Expect
+   to need this (plus the usual AdamW + grad-clip care) at non-toy scale.
 
 ## License
 
-Distributed under the Apache License 2.0. See [LICENSE](./LICENSE) for more information.
-
-
-[//]: # (## FAQ)
-
-[//]: # ()
-[//]: # (Soon...)
-
-## Citation
-
-<a id="ibnn-reference">[1]</a>
-Raul Mohedano, Thomas Batard, Erik Velasco-Salido, Ramsses De Los Santos Mendoza, Jorge H. Martínez, Stacey Levine, Marcelo Bertalmío.
-Updating the standard neuron model in artificial neural networks.
-Preprint as [arXiv:XXXX.XXXXX](https://arxiv.org/abs/XXXX.XXXXX), 2026.
-
-
-## Other references and acknowledgements
-
-<a id="torchdeq-reference">[2]</a>
-Zhengyang Geng and J. Zico Kolter. TorchDEQ: A Library for Deep Equilibrium Models.
-GitHub repository ([link](https://github.com/locuslab/torchdeq)), 2023.
-
-Moreover, we would like to specially thank [PyTorch](https://pytorch.org/) for their open source environment,
-allowing this and many other research teams to develop and test their ideas.
+Apache 2.0, matching upstream.
