@@ -28,22 +28,48 @@ class GPTConfig:
     d_ff: int = None            # defaults to 4 * d_model
     dropout: float = 0.0
     ffn: str = "ibnn"           # "ibnn" or "sm"
+    attn: str = "softmax"       # "softmax" (standard) or "forget" (content-gated decay)
     # IBNN hyperparameters (ignored when ffn == "sm")
     ibnn_lambda: float = -0.05
     ibnn_lambda_trainable: bool = True
     ibnn_p: float = 10.0
     ibnn_num_iters: int = 1     # 1 == lite (forward only); >1 unrolls the implicit solve
+    ibnn_chunk_size: int = 0    # >0 computes the O(D^2) lateral term in chunks to save memory
+    ibnn_coupling: str = "meanfield"  # "meanfield" (paper, parameter-free) or "learned" (w_ik)
 
 
 class CausalSelfAttention(nn.Module):
+    """Causal self-attention, optionally with a content-gated forget mechanism.
+
+    attn="softmax": standard scaled dot-product attention.
+    attn="forget":  each (head, position) emits a forget gate f_t = sigmoid(W_f x_t) in (0,1);
+                    the attention from query t to key s<=t is multiplicatively decayed by the
+                    product of forgets in between, prod_{r=s+1..t} f_r. Implemented additively in
+                    log space via a cumulative sum, so it costs one extra small linear + a cumsum
+                    and stays fully parallel. With f_r -> 1 the decay vanishes and this is EXACTLY
+                    softmax attention, so it is a strict superset (it can always fall back to it).
+
+    Motivation: an LSTM (which has a forget gate) beat plain attention on this char-LM, and the
+    token axis is the one axis with sequential structure - so a learnable decay belongs here, on
+    the keys, rather than inside the position-less FFN. This is in the spirit of recent
+    gated/"forgetting" attention work; here it is derived from this repo's own measurements.
+    """
+
     def __init__(self, cfg: GPTConfig):
         super().__init__()
         assert cfg.d_model % cfg.n_head == 0
         self.n_head = cfg.n_head
         self.d_model = cfg.d_model
+        self.forget = (cfg.attn == "forget")
         self.qkv = nn.Linear(cfg.d_model, 3 * cfg.d_model)
         self.proj = nn.Linear(cfg.d_model, cfg.d_model)
         self.drop = nn.Dropout(cfg.dropout)
+        if self.forget:
+            # one forget logit per head per position; bias init positive so f~1 at start
+            # (=> training begins as ordinary attention and only adds decay if it helps).
+            self.fgate = nn.Linear(cfg.d_model, cfg.n_head)
+            nn.init.zeros_(self.fgate.weight)
+            nn.init.constant_(self.fgate.bias, 3.0)   # sigmoid(3)~0.95
         self.register_buffer(
             "mask",
             torch.tril(torch.ones(cfg.block_size, cfg.block_size)).view(
@@ -57,7 +83,13 @@ class CausalSelfAttention(nn.Module):
         q = q.view(B, T, self.n_head, hs).transpose(1, 2)
         k = k.view(B, T, self.n_head, hs).transpose(1, 2)
         v = v.view(B, T, self.n_head, hs).transpose(1, 2)
-        att = (q @ k.transpose(-2, -1)) / math.sqrt(hs)
+        att = (q @ k.transpose(-2, -1)) / math.sqrt(hs)   # (B, nh, T, T)
+        if self.forget:
+            # log f_r = log sigmoid(logit_r); cumulative C_t = sum_{r<=t} log f_r (non-increasing)
+            logf = F.logsigmoid(self.fgate(x)).transpose(1, 2)   # (B, nh, T)
+            cum = logf.cumsum(dim=-1)                             # (B, nh, T)
+            decay = cum.unsqueeze(-1) - cum.unsqueeze(-2)         # (B,nh,T,T): [t,s]=C_t - C_s <=0
+            att = att + decay                                    # additive log-space decay bias
         att = att.masked_fill(self.mask[:, :, :T, :T] == 0, float("-inf"))
         att = F.softmax(att, dim=-1)
         y = att @ v
@@ -89,6 +121,7 @@ class Block(nn.Module):
                 cfg.d_model, d_ff=cfg.d_ff, dropout=cfg.dropout,
                 lam=cfg.ibnn_lambda, lam_trainable=cfg.ibnn_lambda_trainable,
                 p=cfg.ibnn_p, num_iters=cfg.ibnn_num_iters, activation="gelu",
+                chunk_size=cfg.ibnn_chunk_size, coupling=cfg.ibnn_coupling,
             )
         elif cfg.ffn == "sm":
             self.mlp = StandardMLP(cfg)
@@ -113,6 +146,23 @@ class GPT(nn.Module):
         self.head = nn.Linear(cfg.d_model, cfg.vocab_size, bias=False)
         self.head.weight = self.tok_emb.weight  # weight tying
 
+        # GPT-2 style init: small normal everywhere, zeros on biases, and an extra 1/sqrt(2L)
+        # shrink on the two residual-path output projections so the residual stream does not
+        # blow up with depth. Without this the (weight-tied) head produces huge initial logits
+        # and the first-step loss is enormous.
+        self.apply(self._init_weights)
+        for name, p in self.named_parameters():
+            if name.endswith("proj.weight") or name.endswith("down.weight"):
+                nn.init.normal_(p, mean=0.0, std=0.02 / math.sqrt(2 * cfg.n_layer))
+
+    def _init_weights(self, module):
+        if isinstance(module, nn.Linear):
+            nn.init.normal_(module.weight, mean=0.0, std=0.02)
+            if module.bias is not None:
+                nn.init.zeros_(module.bias)
+        elif isinstance(module, nn.Embedding):
+            nn.init.normal_(module.weight, mean=0.0, std=0.02)
+
     def num_params(self):
         return sum(p.numel() for p in self.parameters())
 
@@ -136,7 +186,7 @@ class GPT(nn.Module):
             logits, _ = self(idx_cond)
             logits = logits[:, -1, :] / temperature
             if top_k is not None:
-                v, _ = torch.topk(logits, top_k)
+                v, _ = torch.topk(logits, min(top_k, logits.size(-1)))
                 logits[logits < v[:, [-1]]] = float("-inf")
             probs = F.softmax(logits, dim=-1)
             nxt = torch.multinomial(probs, num_samples=1)

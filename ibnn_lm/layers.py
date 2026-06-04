@@ -27,17 +27,39 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-def _lateral_term(z: torch.Tensor, p: float) -> torch.Tensor:
-    """Mean-field lateral interaction (1/D) * sum_k tanh( p * (z_k - z_i) ).
+def _lateral_term(z: torch.Tensor, p: float, chunk_size: int = 0,
+                  w: torch.Tensor = None) -> torch.Tensor:
+    """Lateral interaction  L_i = sum_k w_ik * tanh( p * (z_k - z_i) ).
 
     z: (..., D). Returns a tensor of the same shape. This is the term that, scaled by
     -lambda, is added to the pre-activation. It is O(D^2) per position; with tanh (an odd
     function) it cannot be factored, so keep D moderate or approximate for very wide layers.
+
+    w: the coupling weights. None -> mean field (uniform w_ik = 1/D, the paper's parameter-free
+    neuron). A (D, D) tensor -> a *learned* coupling that breaks the permutation symmetry of the
+    mean-field form (used to test whether structureless all-to-all coupling is what limits it).
+
+    chunk_size: if > 0 and < D (and w is None), the i-axis is processed in chunks so the peak
+    intermediate is (..., chunk_size, D) instead of the full (..., D, D). Same result, less
+    memory. chunk_size=0 (default) keeps the original single-shot path.
     """
-    # pairwise differences d[..., i, k] = z_k - z_i
-    diff = z.unsqueeze(-2) - z.unsqueeze(-1)          # (..., D, D), entry [i,k] = z_i - z_k
-    coupling = torch.tanh(p * (-diff))                # tanh(p (z_k - z_i))
-    return coupling.mean(dim=-1)                      # average over k -> (..., D)
+    D = z.shape[-1]
+    if w is None and chunk_size and chunk_size < D:
+        outs = []
+        for i0 in range(0, D, chunk_size):
+            zi = z[..., i0:i0 + chunk_size]               # (..., c)
+            # diff[..., a, k] = z_k - z_{i0+a}
+            diff = z.unsqueeze(-2) - zi.unsqueeze(-1)     # (..., c, D)
+            outs.append(torch.tanh(p * diff).mean(dim=-1))  # (..., c)
+        return torch.cat(outs, dim=-1)                    # (..., D)
+    # pairwise differences: diff[..., i, k] = z_k - z_i
+    #   z.unsqueeze(-2) broadcasts the value along i, so its [i,k] entry is z_k;
+    #   z.unsqueeze(-1) broadcasts the value along k, so its [i,k] entry is z_i.
+    diff = z.unsqueeze(-2) - z.unsqueeze(-1)          # (..., D, D), entry [i,k] = z_k - z_i
+    coupling = torch.tanh(p * diff)                   # tanh(p (z_k - z_i))
+    if w is None:
+        return coupling.mean(dim=-1)                  # (1/D) sum_k tanh(...) -> (..., D)
+    return (coupling * w).sum(dim=-1)                 # sum_k w_ik tanh(...) -> (..., D)
 
 
 class IBNNLinear(nn.Module):
@@ -57,10 +79,17 @@ class IBNNLinear(nn.Module):
         tau: damping for the fixed-point update in (0, 1].
         activation: phi, applied after the coupling. 'gelu' | 'relu' | 'identity'.
         bias: whether to learn the bias b.
+        chunk_size: if >0, compute the O(D^2) lateral term in chunks of this many hidden
+                    units to cap peak memory (same result). 0 = single-shot (default).
+        coupling: 'meanfield' (default) uses the paper's parameter-free uniform 1/D weight;
+                  'learned' adds a trainable (D, D) weight matrix w_ik (initialised to 1/D, so
+                  it starts identical to mean-field) that breaks the permutation symmetry. This
+                  is NOT parameter-free - it adds out_features^2 weights per layer.
     """
 
     def __init__(self, in_features, out_features, lam=-0.05, lam_trainable=True,
-                 p=10.0, num_iters=1, tau=1.0, activation="gelu", bias=True):
+                 p=10.0, num_iters=1, tau=1.0, activation="gelu", bias=True, chunk_size=0,
+                 coupling="meanfield"):
         super().__init__()
         self.in_features = in_features
         self.out_features = out_features
@@ -68,6 +97,14 @@ class IBNNLinear(nn.Module):
         self.num_iters = int(num_iters)
         self.tau = float(tau)
         self.activation = activation
+        self.chunk_size = int(chunk_size)
+        self.coupling = coupling
+        if coupling == "learned":
+            # w_ik initialised to 1/D => at init this is exactly the mean-field neuron.
+            self.coupling_w = nn.Parameter(torch.full((out_features, out_features),
+                                                      1.0 / out_features))
+        elif coupling != "meanfield":
+            raise ValueError(f"unknown coupling {coupling}")
 
         self.weight = nn.Parameter(torch.empty(out_features, in_features))
         nn.init.normal_(self.weight, std=0.02)
@@ -90,8 +127,10 @@ class IBNNLinear(nn.Module):
         y = F.linear(x, self.weight, self.bias)   # SM pre-activation (..., D)
         z = y
         lam = self.lam
+        w = self.coupling_w if self.coupling == "learned" else None
         for _ in range(self.num_iters):
-            z = (1.0 - self.tau) * z + self.tau * (y - lam * _lateral_term(z, self.p))
+            lateral = _lateral_term(z, self.p, self.chunk_size, w)
+            z = (1.0 - self.tau) * z + self.tau * (y - lam * lateral)
         return self._phi(z)
 
     def extra_repr(self):

@@ -1,2 +1,10 @@
 __pycache__/
 *.pyc
+
+# harness artifacts
+.venv/
+data/
+checkpoints/
+*.pt
+runs/
+runs_*.log
