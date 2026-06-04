@@ -5,6 +5,9 @@
 
 from .layers import IBNNLinear, IBNNMLP
 from .model import GPT, GPTConfig, StandardMLP, copy_sm_weights_into_ibnn
+from . import data
+from .data import CharTokenizer
+from .utils import get_device, set_seed, count_params
 
 __all__ = [
     "IBNNLinear",
@@ -13,4 +16,9 @@ __all__ = [
     "GPTConfig",
     "StandardMLP",
     "copy_sm_weights_into_ibnn",
+    "data",
+    "CharTokenizer",
+    "get_device",
+    "set_seed",
+    "count_params",
 ]
